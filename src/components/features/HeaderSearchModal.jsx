@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { GRAY_9 } from "../../utils/colorPalette";
+import { GRAY_9, WHITE } from "../../utils/colorPalette";
 
 const HeaderSearchModal = () => {
   return (
@@ -24,6 +24,7 @@ const StModal = styled.div`
   left: 50%;
   width: 800px;
   padding: 25px;
+  background-color: ${WHITE};
   transform: translate(-40%);
   border: 1px solid ${GRAY_9};
   border-top: 0;

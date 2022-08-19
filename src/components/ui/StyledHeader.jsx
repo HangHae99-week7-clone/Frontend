@@ -3,6 +3,8 @@ import { GRAY_9, RED, WHITE } from "../../utils/colorPalette";
 
 const StHeader = styled.header`
   position: fixed;
+  top: 0;
+  left: 0;
   display: flex;
   width: 100%;
   height: 80px;
