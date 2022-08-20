@@ -1,12 +1,10 @@
-
+import SignUpForm from "../components/features/SignUpForm";
 
 
 function SignUp () {
 
   return (
-    <div>
-
-    </div>
+    <SignUpForm />
   )
 }
 
