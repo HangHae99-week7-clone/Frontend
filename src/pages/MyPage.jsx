@@ -1,3 +1,4 @@
+import Header from "../components/common/Header";
 import MyPageContainer from "../components/features/MyPageContainer";
 
 
@@ -6,7 +7,10 @@ function MyPage () {
 
 
   return (
-    <MyPageContainer />
+    <>
+      <Header />
+      <MyPageContainer />
+    </>
   )
 }
 
