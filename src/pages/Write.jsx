@@ -16,11 +16,13 @@ const Write = () => {
   }, []);
 
   const initialState = {
+    image: "",
     placename: "",
     location: "",
     category: "",
     message: "",
-    image: "",
+    room1: "",
+    room2: "",
   };
   const [contents, setContents] = useState(initialState);
 
@@ -49,6 +51,8 @@ const Write = () => {
       .catch((err) => console.log(err));
   };
   /////////////////////////////////////////////////////////////////
+
+  console.log(contents);
 
   return (
     <StLayout>
@@ -86,6 +90,21 @@ const Write = () => {
           </tr>
           <tr>
             <th scope="row">사장님 한마디</th>
+            <td>
+              <input type="text" name="message" value={contents.message} onChange={onChangeHandler} />
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">객실 정보</th>
+            <td>
+              <div>객실 1</div>
+              <input type="text" name="room1" value={contents.room1} onChange={onChangeHandler} />
+              <div>객실 2</div>
+              <input type="text" name="room2" value={contents.room2} onChange={onChangeHandler} />
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">숙소 정보</th>
             <td>
               <input type="text" name="message" value={contents.message} onChange={onChangeHandler} />
             </td>
@@ -134,7 +153,7 @@ const StTable = styled.table`
       width: 100%;
       border: 1px solid ${GRAY_8};
       border-radius: 5px;
-      height: 40px;
+      height: 30px;
       padding: 0 10px;
     }
   }
