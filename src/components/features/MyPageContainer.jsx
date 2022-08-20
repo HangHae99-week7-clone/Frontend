@@ -2,6 +2,7 @@ import { useState } from "react";
 import Gravatar from "react-gravatar";
 import styled from "styled-components"
 import { CommonBorder, CommonBtn, CommonForm, CommonInput, CommonRowBox, CommonText } from "../ui/styledSignUp";
+import { RED} from "../../utils/colorPalette";
 
 
 function MyPageContainer() {
@@ -98,7 +99,7 @@ const PageContainer = styled.div`
 `
 
 const PageHeader = styled.div`
-  background: #f7323f;
+  background: ${RED};
 
   display: flex;
   flex-direction: column-reverse;
@@ -107,18 +108,18 @@ const PageHeader = styled.div`
   
   padding: 0 2rem;
   width: 100vw;
-  height: 211px;
+  height: 240px;
 `
 
 const PageHeaderText = styled.h1`
-  background: #f7323f;
 
   display: flex;
   
   color: #ffffff;
   font-size:2.5rem;
   font-weight: 300;
-  margin:5rem auto;
+  margin: 0 auto;
+  margin-top:7rem;
 
   width: 1024px;
   height: 250px;

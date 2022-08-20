@@ -17,7 +17,7 @@ function WithdrawForm() {
 
   return (
     <WithdrawContainer>
-      <h1 style={{textAlign: "center", fontSize:"24px", marginTop:"4rem"}}>회원탈퇴</h1>
+      <h1 style={{textAlign: "center", fontSize:"24px", margin:"4rem 0 1rem 0" }}>회원탈퇴</h1>
       <ReasonSpace>
         <InfoTitle>왜 떠나시는지 <br /> <span>이유</span>가 있을까요?</InfoTitle>
         <ReasonTextArea placeholder="(선택사항) 서비스 이용 중 아쉬운 점에 대해 알려주세요. 고객님의 소리에 귀 기울일게요. 80자 이내" maxLength={80} />
@@ -44,10 +44,10 @@ function WithdrawForm() {
           <input type="checkbox" name="isAgree" />
           <span>위 주의사항을 모두 숙지했고, 탈퇴에 동의합니다</span>
         </InfoCheck>
-        <CommonBorder background="#f2f2f2" />
+        <CommonBorder background="#f2f2f2" margin="1rem 0 1rem 0" />
         <CommonForm onSubmit={submitWithdrawUser}>
-          <p style={{fontSize:"14px"}}>비밀번호 입력</p>
-          <CommonInput type="text" placeholder="비밀번호를 입력하세요." background="#f5f5f5" border="none" fontSize="16px" placeholderSize="16px" activeBorder="none" />
+          <p style={{fontSize:"16px", marginBottom:"1rem"}}>비밀번호 입력</p>
+          <CommonInput type="text" placeholder="비밀번호를 입력하세요." background="#f5f5f5" border="none" fontSize="16px" placeholderSize="16px" activeBorder="none" margin="0 0 1rem 0" />
           <CommonBtn type="submit" background="#eb4242" margin="8px 0 8px 0">진짜 안녕</CommonBtn>
         </CommonForm>
         <CommonBtn type="button" fontColor="#37373f" background="#ffffff" border="1px solid #cccccc" margin="8px 0 8px 0" onClick={moveToMyPage}>돌아가기</CommonBtn>
@@ -106,7 +106,7 @@ const ReasonTextArea = styled.textarea`
 const InfoMessage = styled.p`
   color: #707070;
   text-align:center;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 `
 
 const InfoSpace = styled.div`

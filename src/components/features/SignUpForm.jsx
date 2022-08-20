@@ -30,7 +30,7 @@ function SignUpForm () {
 
   // move to page
   function moveToMain () {
-    window.location.assign('/main')
+    window.location.assign('/')
   }
 
   // check user sign up data before submit that
@@ -120,6 +120,7 @@ const SignUpHeader = styled.h1`
   font-family: "Pretendard-Regular";
   font-size: 20px;
   margin: auto;
+  margin-bottom: 2rem;
 `
 
 const SignUpFormBox = styled.form`

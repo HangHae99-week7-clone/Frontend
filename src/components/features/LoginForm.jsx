@@ -29,7 +29,7 @@ function LoginForm () {
   
   // move to page
   function moveToMain () {
-    window.location.assign('/main')
+    window.location.assign('/')
   }
 
   function moveToSignUp () {
