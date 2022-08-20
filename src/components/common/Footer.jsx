@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { GRAY_6, GRAY_7, GRAY_9 } from "../../utils/colorPalette";
+import Layout from "../../layout/Layout";
 
 const Footer = () => {
   return (
     <StFooter>
-      <StLayout>
+      <Layout>
         <div>
           <span>회사소개</span>
           <StVerticalBar>|</StVerticalBar>
@@ -26,7 +27,7 @@ const Footer = () => {
           <p>(주) 여기어때컴퍼니</p>
           <p>Copyright GC COMPANY Corp. All rights reserved.</p>
         </div>
-      </StLayout>
+      </Layout>
     </StFooter>
   );
 };
@@ -34,6 +35,7 @@ const Footer = () => {
 export default Footer;
 
 const StFooter = styled.div`
+  width: 100%;
   background-color: ${GRAY_9};
   border-top: 1.5px solid ${GRAY_7};
   margin-top: 70px;
@@ -50,13 +52,6 @@ const StFooter = styled.div`
     color: ${GRAY_6};
     cursor: pointer;
   }
-`;
-
-const StLayout = styled.div`
-  width: 1024px;
-  height: 100%;
-  margin: 0 auto;
-  padding: 0 30px;
 `;
 
 const StVerticalBar = styled.span`
