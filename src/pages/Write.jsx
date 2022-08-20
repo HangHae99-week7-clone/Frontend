@@ -16,26 +16,24 @@ import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 const Write = () => {
-  useEffect(() => {
-    document.body.style.backgroundColor = "#EBEBEB";
-
-    return () => {
-      document.body.style.backgroundColor = "null";
-    };
-  }, []);
-
   const initialState = {
     image: "",
     placename: "",
     location: "",
+    keyword: [],
     category: "",
     message: "",
-    room1: "",
-    room2: "",
+    room1title: "",
+    room1charge: "",
+    room2title: "",
+    room2charge: "",
     content: "",
   };
   const [contents, setContents] = useState(initialState);
   const editorRef = useRef();
+  const selectCategory = ["선택", "모텔", "호텔", "펜션", "캠핑"];
+  const selectLocation = ["선택", "서울", "경기", "강원", "충남", "충북", "전남", "전북", "경남", "경북", "제주"];
+  const selectKeyword = ["선택", "오션뷰", "파티룸", "야외수영장", "애견동반"];
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -46,6 +44,22 @@ const Write = () => {
     event.preventDefault();
     setContents({ ...contents, content: editorRef.current?.getInstance().getHTML() });
   };
+
+  const onKeywordHandler = (event) => {
+    const { value } = event.target;
+    console.log(value);
+    setContents({ ...contents, keyword: [value] });
+  };
+
+  useEffect(() => {
+    //에디터에 이미지 Drag&Drop 방지
+    editorRef.current.getInstance().removeHook("addImageBlobHook");
+    document.body.style.backgroundColor = "#EBEBEB";
+
+    return () => {
+      document.body.style.backgroundColor = "null";
+    };
+  }, []);
 
   /////////////////////////////////////////////////////////////////
   // S3 이미지 업로드 후 contents State에 이미지 URL 넣는 로직
@@ -90,11 +104,11 @@ const Write = () => {
             <th scope="row">숙소 종류</th>
             <td>
               <select name="category" value={contents.category} onChange={onChangeHandler}>
-                <option value="선택">선택</option>
-                <option value="모텔">모텔</option>
-                <option value="호텔">호텔</option>
-                <option value="펜션">펜션</option>
-                <option value="캠핑">캠핑</option>
+                {selectCategory.map((value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                ))}
               </select>
             </td>
           </tr>
@@ -102,6 +116,25 @@ const Write = () => {
             <th scope="row">숙소 위치</th>
             <td>
               <input type="text" name="location" value={contents.location} onChange={onChangeHandler} />
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">숙소 키워드</th>
+            <td>
+              <select onChange={onKeywordHandler}>
+                {selectLocation.map((value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                ))}
+              </select>
+              <select onChange={onKeywordHandler}>
+                {selectKeyword.map((value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                ))}
+              </select>
             </td>
           </tr>
           <tr>
@@ -133,9 +166,11 @@ const Write = () => {
             <th scope="row">객실 정보</th>
             <td>
               <div>객실 1</div>
-              <input type="text" name="room1" value={contents.room1} onChange={onChangeHandler} />
+              <input type="text" placeholder="객실명" name="room1title" value={contents.room1title} onChange={onChangeHandler} />
+              <input type="text" placeholder="객실가격" name="room1charge" value={contents.room1charge} onChange={onChangeHandler} />
               <div>객실 2</div>
-              <input type="text" name="room2" value={contents.room2} onChange={onChangeHandler} />
+              <input type="text" placeholder="객실명" name="room2title" value={contents.room2title} onChange={onChangeHandler} />
+              <input type="text" placeholder="객실가격" name="room2charge" value={contents.room2charge} onChange={onChangeHandler} />
             </td>
           </tr>
         </tbody>
