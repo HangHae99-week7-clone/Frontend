@@ -107,6 +107,7 @@ const PageHeader = styled.div`
   align-items: flex-start;
   
   padding: 0 2rem;
+  margin: auto;
   width: 100vw;
   height: 240px;
 `
@@ -140,6 +141,7 @@ const PageNav = styled.nav`
   display:flex;
   flex-direction: column;
   margin-right: 2rem;
+  width:256px;
 `
 
 const PageUntitledList = styled.div`
@@ -161,6 +163,7 @@ const PageMenuList = styled.div`
 const PageDetail = styled.div`
   display: flex;
   flex-direction: column;
+  width: 768px;
 `
 
 const PageName = styled.h3`
