@@ -1,8 +1,17 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { GRAY_7, GRAY_8, RED, WHITE } from "../utils/colorPalette";
+import React, { useEffect, useState, useRef } from "react";
+import { StLayout, StSubmit, StTable } from "../components/ui/StyledWrite";
+/////////////////////////////////////////////////////////////////
+//Amazon S3 이미지 관련 임포트
 import S3 from "react-aws-s3";
 import { v4 as uuidv4 } from "uuid";
+/////////////////////////////////////////////////////////////////
+//토스트 UI 텍스트 에디터 관련 임포트
+import { Editor } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import "tui-color-picker/dist/tui-color-picker.css";
+import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
+import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
+/////////////////////////////////////////////////////////////////
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
@@ -23,12 +32,19 @@ const Write = () => {
     message: "",
     room1: "",
     room2: "",
+    content: "",
   };
   const [contents, setContents] = useState(initialState);
+  const editorRef = useRef();
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
     setContents({ ...contents, [name]: value });
+  };
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+    setContents({ ...contents, content: editorRef.current?.getInstance().getHTML() });
   };
 
   /////////////////////////////////////////////////////////////////
@@ -95,6 +111,25 @@ const Write = () => {
             </td>
           </tr>
           <tr>
+            <th scope="row">숙소 정보</th>
+            <td>
+              <Editor
+                ref={editorRef}
+                placeholder="내용을 입력해주세요."
+                previewStyle="vertical" //미리보기 스타일 지정
+                height="500px" //에디터 창 높이
+                initialEditType="wysiwyg" //초기 입력모드 설정(디폴트 markdown)
+                plugins={[[colorSyntax, { preset: ["#000", "#ff0000"] }]]} //text color 플러그인
+                toolbarItems={[
+                  // 툴바 옵션 설정
+                  ["heading", "bold", "italic", "strike"],
+                  ["hr", "quote"],
+                  ["ul", "ol", "task", "indent", "outdent"],
+                ]}
+              ></Editor>
+            </td>
+          </tr>
+          <tr>
             <th scope="row">객실 정보</th>
             <td>
               <div>객실 1</div>
@@ -103,71 +138,11 @@ const Write = () => {
               <input type="text" name="room2" value={contents.room2} onChange={onChangeHandler} />
             </td>
           </tr>
-          <tr>
-            <th scope="row">숙소 정보</th>
-            <td>
-              <input type="text" name="message" value={contents.message} onChange={onChangeHandler} />
-            </td>
-          </tr>
         </tbody>
       </StTable>
-      <StSubmit>저장 후 다음 단계</StSubmit>
+      <StSubmit onClick={onSubmitHandler}>숙소 등록</StSubmit>
     </StLayout>
   );
 };
 
 export default Write;
-
-const StLayout = styled.div`
-  width: 964px;
-  height: 100%;
-  margin: 100px auto 50px auto;
-  border: 1px solid ${GRAY_8};
-  border-radius: 10px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-
-  padding: 25px;
-  background-color: ${WHITE};
-`;
-
-const StTable = styled.table`
-  width: 100%;
-
-  tr {
-    height: 100%;
-  }
-
-  th {
-    background-color: ${GRAY_7};
-    border: 1px solid ${GRAY_8};
-    width: 135px;
-    font-size: 15px;
-    font-weight: 400;
-  }
-
-  td {
-    border: 1px solid ${GRAY_8};
-    padding: 10px;
-
-    input {
-      width: 100%;
-      border: 1px solid ${GRAY_8};
-      border-radius: 5px;
-      height: 30px;
-      padding: 0 10px;
-    }
-  }
-`;
-
-const StSubmit = styled.button`
-  margin-top: 25px;
-  width: 170px;
-  height: 45px;
-  background-color: ${RED};
-
-  border: none;
-  border-radius: 5px;
-
-  font-size: 17px;
-  color: ${WHITE};
-`;
