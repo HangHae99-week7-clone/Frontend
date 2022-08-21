@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { emailFormat, nicknameList1, nicknameList2, passwordFormat } from "../../utils/reqList";
-import { CommonBtn, CommonInput, ErrorText, LogoBox, LogoImage, PopUpBackground, PopUpModal, PopUpMsg } from "../ui/styledSignUp";
+import { CommonBtn, CommonInput, CommonRowBox, ErrorText, LogoBox, LogoImage, PopUpBackground, PopUpModal, PopUpMsg } from "../ui/styledSignUp";
 import { useDispatch, useSelector } from "react-redux";
 
 function SignUpForm () {
@@ -119,7 +119,10 @@ function SignUpForm () {
                                 // comparison password and confirm password 
                                 "　" : "비밀번호가 일치하지 않습니다." }</ErrorText>
           <SignUpLabel>닉네임</SignUpLabel>
-          <CommonInput name="nickname" type="text" border="1px solid #ececec" value={signUpData.nickname} onChange={inputSignUpData} />
+          <CommonRowBox style={{gap:"0.5rem"}}>
+            <CommonInput name="nickname" type="text" border="1px solid #ececec" width="269px" value={signUpData.nickname} onChange={inputSignUpData} />
+            <CommonBtn type="button" background="ebebeb" fontColor="#666666" padding="0 1rem" onClick={createRandomNickname} fontSize="14px" height="48px" >딴거할래요</CommonBtn>
+          </CommonRowBox>
           <CommonBtn type="submit" background={btnState.background} fontColor={btnState.color} margin="16px 0 8px 0" onClick={confirmSignUpData}>가입하기</CommonBtn>
         </SignUpFormBox>
       </SignUpFormContainer>

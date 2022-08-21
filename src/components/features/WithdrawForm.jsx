@@ -1,22 +1,34 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
-import { CommonBorder, CommonBtn, CommonForm, CommonInput, InfoTitle } from "../ui/styledSignUp";
+import { AlertMessage, CommonBorder, CommonBtn, CommonForm, CommonInput, InfoTitle } from "../ui/styledSignUp";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 function WithdrawForm() {
   const [btnState, setBtnState] = useState(false);
+  const [popUp, setPopUp] = useState({opacity:0, visibility:"hidden"});
   const checkboxRef = useRef();
   const passwordRef = useRef();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  // const userState = useSelector(state => state.sign)
+  // 받아올 데이터는 result와 msg로 처리하면 될 것 같다.
+
+
+  // useEffect(() => {
+  //   if (userState.result === false)
+  //   setPopUp({opacity:1, visibility:"visible"})
+  //     setTimeout(() => setPopUp({opacity: 0, visibility: "hidden"}), 1000)
+  // },[userState])
 
   // check withdraw user setting
   function checkWithdrawSet() {
+    console.log(checkboxRef.current.checked)
     if (checkboxRef.current.checked === false)
-      setBtnState(false)
-    if (passwordRef.current.value === "" || passwordRef.current.value.length <8)
-      setBtnState(false)
+      return setBtnState(false)
+    if (passwordRef.current.value === "" || passwordRef.current.value.length < 8)
+      return setBtnState(false)
     else
-      setBtnState(true)
+      return setBtnState(true)
   }  
 
   // submit with password for withdraw user data
@@ -24,8 +36,9 @@ function WithdrawForm() {
     event.preventDefault();
     if (btnState === false)
       return
-    
-    // dispatch
+    if (popUp.opacity === 1)
+      return
+    // dispatch();
   }
 
   // move to prev page
@@ -63,10 +76,11 @@ function WithdrawForm() {
           <span>위 주의사항을 모두 숙지했고, 탈퇴에 동의합니다</span>
         </InfoCheck>
         <CommonBorder background="#f2f2f2" margin="1rem 0 1rem 0" />
-        <CommonForm onSubmit={submitWithdrawUser}>
+        <CommonForm onSubmit={submitWithdrawUser} style={{position:"relative"}}>
           <p style={{fontSize:"16px", marginBottom:"1rem"}}>비밀번호 입력</p>
           <CommonInput type="password" placeholder="비밀번호를 입력하세요." ref={passwordRef} background="#f5f5f5" border="none" fontSize="16px" placeholderSize="16px" activeBorder="none" margin="0 0 1rem 0" onChange={checkWithdrawSet} />
           <CommonBtn type="submit" background={btnState ? "#eb4242" : "#fafafa"} fontColor={btnState ? "#ffffff" : "#d2d2d2"} margin="8px 0 8px 0">진짜 안녕</CommonBtn>
+          <AlertMessage opacity={popUp.opacity} visibility={popUp.visibility} top="25px" left="54px">비밀번호가 일치하지 않습니다.<br />다시 확인해주세요.</AlertMessage>
         </CommonForm>
         <CommonBtn type="button" fontColor="#37373f" background="#ffffff" border="1px solid #cccccc" margin="8px 0 8px 0" onClick={moveToMyPage}>돌아가기</CommonBtn>
       </InfoSpace>
