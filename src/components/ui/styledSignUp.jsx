@@ -125,3 +125,64 @@ export const InfoTitle = styled.h2`
     color:#eb4242;
   }
 `
+
+export const PopUpBackground = styled.div`
+  background: rgba(0, 0, 0, 0.6);
+
+  position:absolute;
+  width: 100vw;
+  height: 100vh;
+
+  top:0;
+  z-index: 30;
+  
+`
+
+export const PopUpModal = styled.div`
+  background: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  
+
+  padding: 24px;
+  margin:40vh auto;
+
+  width: 340px;
+
+  box-sizing: border-box;
+`
+
+export const PopUpMsg = styled.h2`
+  font-family: "Pretendard-Regular";
+  font-size: 18px;
+  color: #000000;
+
+  margin-bottom: 1rem;
+
+`
+
+export const AlertMessage = styled.div`
+  background: rgba(0,0,0,0.6);
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+
+  color:#ffffff;
+  text-align: center;
+  
+  border: none;
+  border-radius: 10px;
+  margin: auto;
+  padding: 1rem 2rem;
+
+  max-width: 300px;
+  top:${props=>props.top};
+  left:${props=>props.left};
+  opacity: ${props => props.opacity};
+  visibility: ${props => props.visibility};
+  transition: visibility 0.5s;
+  z-index: 5;
+`

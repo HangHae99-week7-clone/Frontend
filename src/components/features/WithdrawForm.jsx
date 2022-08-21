@@ -1,16 +1,34 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import { CommonBorder, CommonBtn, CommonForm, CommonInput, InfoTitle } from "../ui/styledSignUp";
-
+import { useDispatch } from "react-redux";
 
 function WithdrawForm() {
-  const [password, setPassword] = useState("");
+  const [btnState, setBtnState] = useState(false);
+  const checkboxRef = useRef();
+  const passwordRef = useRef();
+  const dispatch = useDispatch();
 
+  // check withdraw user setting
+  function checkWithdrawSet() {
+    if (checkboxRef.current.checked === false)
+      setBtnState(false)
+    if (passwordRef.current.value === "" || passwordRef.current.value.length <8)
+      setBtnState(false)
+    else
+      setBtnState(true)
+  }  
+
+  // submit with password for withdraw user data
   function submitWithdrawUser(event) {
-
-
+    event.preventDefault();
+    if (btnState === false)
+      return
+    
+    // dispatch
   }
 
+  // move to prev page
   function moveToMyPage () {
     window.location.assign('/mypage')
   }
@@ -41,14 +59,14 @@ function WithdrawForm() {
           <li>계정 정보 및 찜 목록 등 서비스 이용정보는 복구가 불가하며, 동일한 아이디로 24시간 이후 재가입이 가능해요.</li>
         </InfoText>
         <InfoCheck>
-          <input type="checkbox" name="isAgree" />
+          <input type="checkbox" name="isAgree" ref={checkboxRef} onChange={checkWithdrawSet} />
           <span>위 주의사항을 모두 숙지했고, 탈퇴에 동의합니다</span>
         </InfoCheck>
         <CommonBorder background="#f2f2f2" margin="1rem 0 1rem 0" />
         <CommonForm onSubmit={submitWithdrawUser}>
           <p style={{fontSize:"16px", marginBottom:"1rem"}}>비밀번호 입력</p>
-          <CommonInput type="text" placeholder="비밀번호를 입력하세요." background="#f5f5f5" border="none" fontSize="16px" placeholderSize="16px" activeBorder="none" margin="0 0 1rem 0" />
-          <CommonBtn type="submit" background="#eb4242" margin="8px 0 8px 0">진짜 안녕</CommonBtn>
+          <CommonInput type="password" placeholder="비밀번호를 입력하세요." ref={passwordRef} background="#f5f5f5" border="none" fontSize="16px" placeholderSize="16px" activeBorder="none" margin="0 0 1rem 0" onChange={checkWithdrawSet} />
+          <CommonBtn type="submit" background={btnState ? "#eb4242" : "#fafafa"} fontColor={btnState ? "#ffffff" : "#d2d2d2"} margin="8px 0 8px 0">진짜 안녕</CommonBtn>
         </CommonForm>
         <CommonBtn type="button" fontColor="#37373f" background="#ffffff" border="1px solid #cccccc" margin="8px 0 8px 0" onClick={moveToMyPage}>돌아가기</CommonBtn>
       </InfoSpace>

@@ -1,16 +1,29 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { CommonInput, CommonBtn, ErrorText, LogoBox, LogoImage } from "../ui/styledSignUp";
+import { useEffect, useState } from "react";
+import { CommonInput, CommonBtn, ErrorText, LogoBox, LogoImage, AlertMessage } from "../ui/styledSignUp";
 import { emailFormat } from "../../utils/reqList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function LoginForm () {
 
   const [loginData, setLoginData] = useState({email: "", password: ""})
   const [checkState, setCheckState] = useState({email:"none", password:"none"});
   const [popUp1, setpopUp1] = useState({opacity: 0, visibility: "hidden"});
+  const [popUp2, setpopUp2] = useState({opacity: 0, visibility: "hidden"});
   const dispatch = useDispatch();
+  // const loginState = useSelector(state=> state.sign);
+  // 작성하면서 생각하니 signup/signin으로 많이들 표현함.
+  // 받아올 데이터는 result와 msg로 처리하면 될 것 같다.
 
+  // 이게 맞을까?
+  // redux에서 state를 받아와서, 모달을 띄우는 거라면 이렇게 처리하는 게 맞나?
+  // 무한 렌더링이 일어나지 않게 하려면 어떻게 해야하는거지?
+  // useEffect(() => {
+  //   if (loginState.result === false)
+  //     setpopUp2({opacity: 1, visibility: "visible"})
+  //     setTimeout(() => setpopUp2({opacity: 0, visibility: "hidden"}), 1000)
+  // },[loginState]])
+  
   // input data change event
   function inputLoginData (event) {
     const { type, value } = event.target;
@@ -54,7 +67,8 @@ function LoginForm () {
   return (
     <>
       <LoginFormContainer>
-        <AlertMessage opacity={popUp1.opacity} visibility={popUp1.visibility}>현재 서비스 점검중입니다.<br />다음에 다시 시도해주십시오.</AlertMessage>
+        <AlertMessage opacity={popUp1.opacity} visibility={popUp1.visibility} top="116px" left="64px">현재 서비스 점검중입니다.<br />다음에 다시 시도해주십시오.</AlertMessage>
+        <AlertMessage opacity={popUp2.opacity} visibility={popUp2.visibility} top="116px" left="64px">이메일이나 비밀번호가 일치하지 않습니다.<br />다시 시도해주십시오.</AlertMessage>
         <LogoBox>
           <LogoImage src="https://image.goodchoice.kr/images/web_v3/ic_bi_yeogi_250px.png" alt="GoodChoice Inc. Logo" onClick={moveToMain}/>
         </LogoBox>
@@ -141,29 +155,4 @@ const SignUpBtn = styled.button`
   margin: 16px 0;
 
   cursor: pointer;
-`
-
-const AlertMessage = styled.div`
-  background: rgba(0,0,0,0.6);
-  
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-
-  color:#ffffff;
-  text-align: center;
-  
-  border: none;
-  border-radius: 10px;
-  margin: auto;
-  padding: 1rem 2rem;
-
-  max-width: 300px;
-  top:116px;
-  left:64px;
-  opacity: ${props => props.opacity};
-  visibility: ${props => props.visibility};
-  transition: visibility 0.5s;
-  z-index: 5;
 `
