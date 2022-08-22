@@ -1,21 +1,38 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import { StContentsBox, StImageBox, StKeywordDiv, StLeftBox, StNothingSearch, StRatingBox, StRightBox, StTextBox, StWrap } from "../components/ui/StyledSearch";
 import Footer from "../components/common/Footer";
 import Header from "../components/common/Header";
 import Layout from "../layout/Layout";
-import { GRAY_7, GRAY_9 } from "../utils/colorPalette";
+import { avgRating, avgRatingWord } from "../utils/avgRating";
+import { __getKeywordSearch } from "../app/module/SearchSlice";
 
 const Search = () => {
+  const dispatch = useDispatch();
+  const result = useSelector((state) => state.search.result); //검색 결과 Store
+  const [searchParams, _] = useSearchParams(); //쿼리스트링 값을 가져오기 위한 Hooks
+  const keyword = searchParams.get("keyword"); //쿼리스트링 중 keyword라는 key의 value값을 변수에 저장
+
+  //컴포넌트가 마운트 될 때마다 API를 요청한다.
+  //assign을 통해 들어오는 컴포넌트 이므로 따로 deps를 추가하지는 않는다.
+  useEffect(() => {
+    dispatch(__getKeywordSearch(keyword));
+  }, []);
+
   return (
-    <div>
+    <>
       <Header />
-      <StKeywordDiv>'오션뷰'</StKeywordDiv>
+
+      <StKeywordDiv>'{keyword}'</StKeywordDiv>
+
       <Layout>
         <StWrap>
           <StLeftBox>
             <div>
               <h2>날짜</h2>
             </div>
+            <hr />
             <div>
               <h2>상세조건</h2>
             </div>
@@ -26,131 +43,47 @@ const Search = () => {
               <h3>가격</h3>
             </div>
           </StLeftBox>
+
           <StRightBox>
-            <StContentsBox>
-              <StImageBox>
-                <img src="https://image.goodchoice.kr/resize_490x348/affiliate/2020/07/28/5f1fc14156c03.png" />
-                <div>호텔</div>
-              </StImageBox>
-              <StTextBox>
-                <div>
-                  <h2>디아크 리조트</h2>
-                  <span>전남 여수시 돌산읍 평사리 산 318-103</span>
-                </div>
-                <div>
-                  <p>516,200원</p>
-                </div>
-              </StTextBox>
-            </StContentsBox>
+            {result.length ? (
+              result.map((item) => (
+                <StContentsBox key={item.postId}>
+                  <StImageBox>
+                    <img src={item.image} alt={item.postId} />
+                    <div>{item.category}</div>
+                  </StImageBox>
+
+                  <StTextBox>
+                    <div>
+                      <h2>{item.placename}</h2>
+                      <StRatingBox>
+                        <span>{avgRating(item.review).toFixed(1)}</span>
+                        <span>
+                          {avgRatingWord(avgRating(item.review))} ({item.review.length})
+                        </span>
+                      </StRatingBox>
+                      <span>{item.location}</span>
+                    </div>
+
+                    <div>
+                      <h2>{Math.min(...item.roomcharge).toLocaleString("ko-KR")} 원</h2>
+                    </div>
+                  </StTextBox>
+                </StContentsBox>
+              ))
+            ) : (
+              <StNothingSearch>
+                <p>'{keyword}'에 대한 검색결과가 없습니다.</p>
+                <p>다시 입력해주세요.</p>
+              </StNothingSearch>
+            )}
           </StRightBox>
         </StWrap>
       </Layout>
+
       <Footer />
-    </div>
+    </>
   );
 };
 
 export default Search;
-
-const StKeywordDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 160px;
-  background-color: ${GRAY_9};
-  margin-top: 80px;
-  margin-bottom: 40px;
-  font-size: 38px;
-`;
-
-const StWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StLeftBox = styled.div`
-  width: 300px;
-  height: 660px;
-  padding: 20px;
-  border: 1px solid ${GRAY_7};
-  border-radius: 5px;
-
-  div:nth-child(1) {
-    padding-bottom: 30px;
-    border-bottom: 1px solid ${GRAY_7};
-  }
-
-  div:nth-child(2),
-  div:nth-child(3),
-  div:nth-child(4) {
-    padding-top: 30px;
-  }
-
-  h2 {
-    font-size: 18px;
-    font-weight: 700px;
-  }
-`;
-
-const StRightBox = styled.div`
-  width: 635px;
-  height: 500px;
-`;
-
-const StContentsBox = styled.div`
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid ${GRAY_7};
-  padding: 16px 0;
-`;
-
-const StImageBox = styled.div`
-  position: relative;
-  width: 160px;
-  height: 200px;
-
-  img {
-    height: 100%;
-    object-fit: cover;
-  }
-
-  div {
-    position: absolute;
-    background-color: #3e4c67;
-    width: 30px;
-    height: 18px;
-    line-height: 18px;
-    color: ${GRAY_9};
-    font-size: 14px;
-    text-align: center;
-    top: 8px;
-    right: 8px;
-  }
-`;
-
-const StTextBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding-top: 15px;
-  width: 460px;
-
-  h2,
-  p {
-    font-size: 22px;
-    font-weight: 700;
-  }
-
-  span {
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 18px;
-  }
-
-  div:nth-child(2) {
-    display: flex;
-    justify-content: end;
-  }
-`;
