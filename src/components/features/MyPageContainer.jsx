@@ -1,12 +1,34 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Gravatar from "react-gravatar";
 import styled from "styled-components"
-import { CommonBorder, CommonBtn, CommonForm, CommonInput, CommonRowBox, CommonText } from "../ui/styledSignUp";
-import { RED} from "../../utils/colorPalette";
-
+import { AlertMessage, CommonBorder, CommonBtn, CommonForm, CommonInput, CommonRowBox, CommonText } from "../ui/styledSignUp";
+import { RED } from "../../utils/colorPalette";
+import { useDispatch, useSelector } from "react-redux";
+import { nicknameList1, nicknameList2 } from "../../utils/reqList";
 
 function MyPageContainer() {
   const [mode, setMode] = useState("read");
+  const [popUp, setPopUp] = useState({opacity: 0, visibility: "hidden"});
+  const inputRef = useRef();
+  const dispatch = useDispatch();
+  // const userState = useSelector(state => state.sign)
+  // 작성하면서 생각하니 signup/signin으로 많이들 표현함.
+  // 받아올 데이터는 result와 msg로 처리하면 될 것 같다.
+
+  // useEffect(() => {
+  //   if (userState.result === false)
+  //     nicknameChangeError()
+  // },[userState])
+
+
+
+  // view message by error to change nickname
+  function nicknameChangeError() {
+    if (popUp.opacity === 1)
+      return;
+    setPopUp({opacity: 1, visibility: "visible"})
+    setTimeout(() => setPopUp({opacity: 0, visibility: "hidden"}), 1000)
+  }
 
   // logout user
   function logoutConfirm (event) {
@@ -28,8 +50,20 @@ function MyPageContainer() {
       setMode("read")
   }
 
+  // make random nickname 
+  function createRandomNickname() {
+    const randomNickName = nicknameList1[Math.floor(Math.random()*nicknameList1.length)] + nicknameList2[Math.floor(Math.random()*nicknameList2.length)]
+    inputRef.current.value = randomNickName;
+  }
+
+  // change nickname 
   function changeNickname(event) {
-    
+    if (inputRef.current.value === "")
+      return false
+    if (popUp.opacity === 1)
+      return false
+      
+    dispatch();
   }
 
 
@@ -65,16 +99,19 @@ function MyPageContainer() {
             <CommonBtn type="button" fontColor="#37373f" background="#ffffff" border="1px solid #cccccc" height="42px" padding="0.5rem 4rem" margin="1rem auto 1rem 0" onClick={changeMode} >수정</CommonBtn>
           </>
           :
-          <CommonForm>
-            <CommonRowBox justifyContent="flex-start" alignItems="center" margin="1rem 0">
-              <CommonInput margin="0 1rem 0 0 " width="20rem" height="42px" />
-              <CommonBtn type="button" fontColor="#ffffff" background="#fb0552" height="42px" padding="0.5rem 1rem" margin="0 2rem 0 0" fontSize="16px">딴거할래요</CommonBtn>
-            </CommonRowBox>
-            <CommonRowBox>
-              <CommonBtn type="button" fontColor="#ffffff" background="#fb0552" height="42px" padding="0.5rem 2rem" margin="1rem 2rem 1rem 0" fontSize="16px" onClick={changeNickname}>수정완료</CommonBtn>
-              <CommonBtn type="button" fontColor="#37373f" background="#ffffff" border="1px solid #cccccc" height="42px" padding="0.5rem 2rem" margin="1rem 1rem 1rem 0" fontSize="16px" onClick={changeMode}>수정취소</CommonBtn>
-            </CommonRowBox>
-          </CommonForm>
+          <>
+            <CommonForm>
+              <CommonRowBox justifyContent="flex-start" alignItems="center" margin="1rem 0">
+                <CommonInput margin="0 1rem 0 0 " width="20rem" height="42px" ref={inputRef} />
+                <CommonBtn type="button" fontColor="#ffffff" background="#fb0552" height="42px" padding="0.5rem 1rem" margin="0 2rem 0 0" fontSize="16px" onClick={createRandomNickname}>딴거할래요</CommonBtn>
+              </CommonRowBox>
+              <CommonRowBox style={{position:"relative"}}>
+                <AlertMessage opacity={popUp.opacity} visibility={popUp.visibility} top="-70px">이미 존재하는 닉네임입니다.<br />다른 닉네임으로 변경해주세요.</AlertMessage>
+                <CommonBtn type="button" fontColor="#ffffff" background="#fb0552" height="42px" padding="0.5rem 2rem" margin="1rem 2rem 1rem 0" fontSize="16px" onClick={changeNickname}>수정완료</CommonBtn>
+                <CommonBtn type="button" fontColor="#37373f" background="#ffffff" border="1px solid #cccccc" height="42px" padding="0.5rem 2rem" margin="1rem 1rem 1rem 0" fontSize="16px" onClick={changeMode}>수정취소</CommonBtn>
+              </CommonRowBox>
+            </CommonForm>
+          </>
           }
           <CommonBorder background="#f2f2f2" margin="1rem 0" width="45vw" />
           <CommonRowBox justifyContent="flex-start" alignItems="center">
@@ -84,7 +121,6 @@ function MyPageContainer() {
           </CommonRowBox>
         </PageDetail>
       </PageBody>
-
     </PageContainer>
   )
 }
