@@ -69,7 +69,7 @@ const Header = () => {
               <li>내주변</li>
               <li>예약내역</li>
               <li>더보기</li>
-              {true ? (
+              {localStorage.token ? (
                 <li onMouseOver={() => setUserModal(true)} onMouseOut={() => setUserModal(false)}>
                   <Gravatar onClick={() => navigate("/mypage")} style={{ borderRadius: "50%" }} email="a-email@example.com" size={29} default="mp" />
 
