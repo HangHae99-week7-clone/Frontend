@@ -1,5 +1,5 @@
-import styled, { keyframes } from "styled-components";
-import { GRAY_9, RED, WHITE } from "../../utils/colorPalette";
+import styled from "styled-components";
+import { GRAY_8, GRAY_9, RED, WHITE } from "../../utils/colorPalette";
 
 const StHeader = styled.header`
   position: fixed;
@@ -9,7 +9,7 @@ const StHeader = styled.header`
   width: 100%;
   height: 80px;
   background-color: ${RED};
-  z-index: 9999;
+  z-index: 999;
 `;
 
 const StWrap = styled.div`
@@ -22,6 +22,7 @@ const StWrap = styled.div`
 `;
 
 const StLogo = styled.img`
+  cursor: pointer;
   position: absolute;
   left: 30px;
   width: 96px;
@@ -44,7 +45,7 @@ const StForm = styled.form`
     }
 
     &::placeholder {
-      color: ${GRAY_9};
+      color: ${GRAY_8};
     }
   }
 `;
@@ -53,7 +54,8 @@ const StIconSearch = styled.div`
   cursor: pointer;
   position: absolute;
   display: flex;
-  color: ${GRAY_9};
+  color: ${GRAY_8};
+  font-size: 21px;
   transition-duration: 0.5s;
 `;
 
@@ -67,17 +69,35 @@ const StIconCancel = styled.div`
 `;
 
 const StList = styled.ul`
+  display: flex;
+  align-items: center;
   position: absolute;
   right: 30px;
   cursor: pointer;
-  display: flex;
   gap: 40px;
   font-size: 18px;
-  color: ${GRAY_9};
+  color: ${GRAY_8};
 
-  li:hover {
-    color: ${WHITE};
+  li {
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: ${WHITE};
+    }
   }
 `;
 
-export { StForm, StHeader, StIconSearch, StIconCancel, StList, StLogo, StWrap };
+const StModalBg = styled.div`
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export { StForm, StHeader, StIconSearch, StIconCancel, StList, StLogo, StWrap, StModalBg };

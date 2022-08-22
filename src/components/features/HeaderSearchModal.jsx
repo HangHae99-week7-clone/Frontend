@@ -1,31 +1,41 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { GRAY_9, WHITE } from "../../utils/colorPalette";
 
 const HeaderSearchModal = () => {
+  const dispatch = useDispatch();
+  const onClickKeyword = (event) => {
+    const { textContent } = event.target;
+    dispatch();
+  };
+
+  const recommendKeyword = ["오션뷰", "파티룸", "야외수영장", "애견동반"];
   return (
-    <StModal>
-      <h1>추천 검색어</h1>
-      <ul>
-        <li>오션뷰</li>
-        <li>파티룸</li>
-        <li>야외수영장</li>
-        <li>애견동반</li>
-      </ul>
-    </StModal>
+    <>
+      <StSearchModal>
+        <h1>추천 검색어</h1>
+        <ul>
+          {recommendKeyword.map((value) => (
+            <li onClick={onClickKeyword} key={value}>
+              {value}
+            </li>
+          ))}
+        </ul>
+      </StSearchModal>
+    </>
   );
 };
 
 export default HeaderSearchModal;
 
-const StModal = styled.div`
-  position: fixed;
+const StSearchModal = styled.div`
+  position: absolute;
   top: 80px;
-  left: 50%;
+  left: 195px;
   width: 800px;
   padding: 25px;
   background-color: ${WHITE};
-  transform: translate(-40%);
   border: 1px solid ${GRAY_9};
   border-top: 0;
   border-radius: 0 0 5px 5px;
@@ -39,5 +49,9 @@ const StModal = styled.div`
   ul > li {
     cursor: pointer;
     margin-top: 12px;
+
+    &:hover {
+      text-decoration-line: underline;
+    }
   }
 `;

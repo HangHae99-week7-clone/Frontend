@@ -81,14 +81,8 @@ const StLeftBox = styled.div`
     border-bottom: 1px solid ${GRAY_7};
   }
 
-  div:nth-child(2) {
-    padding-top: 30px;
-  }
-
-  div:nth-child(3) {
-    padding-top: 30px;
-  }
-
+  div:nth-child(2),
+  div:nth-child(3),
   div:nth-child(4) {
     padding-top: 30px;
   }

@@ -1,15 +1,21 @@
 import React, { useState } from "react";
+import Gravatar from "react-gravatar";
 import LOGO_WHITE from "../../images/LOGO_WHITE.png";
-import { FaSearch } from "react-icons/fa";
+import { HiOutlineSearch } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
-import { StForm, StHeader, StIconSearch, StIconCancel, StList, StLogo, StWrap } from "../ui/StyledHeader";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { StForm, StHeader, StIconSearch, StIconCancel, StList, StLogo, StWrap, StModalBg } from "../ui/StyledHeader";
 import { useDispatch } from "react-redux";
 import HeaderSearchModal from "../features/HeaderSearchModal";
+import { useNavigate } from "react-router-dom";
+import HeaderUserModal from "../features/HeaderUserModal";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [openSearch, setOpenSearch] = useState(false);
+  const [userModal, setUserModal] = useState(false);
 
   const onChangeHandler = (event) => {
     setSearch(event.target.value);
@@ -17,7 +23,7 @@ const Header = () => {
 
   const onSearchHandler = (event) => {
     event.preventDefault();
-    dispatch();
+    // dispatch();
   };
 
   const openSearchHandler = () => {
@@ -28,10 +34,12 @@ const Header = () => {
     <>
       <StHeader>
         <StWrap>
-          <StLogo src={LOGO_WHITE} />
+          {userModal ? <HeaderUserModal /> : null}
+          <StLogo src={LOGO_WHITE} onClick={() => window.location.assign("/")} />
           <StIconSearch style={{ right: openSearch ? "810px" : "400px" }} onClick={openSearch ? onSearchHandler : openSearchHandler}>
-            <FaSearch />
+            <HiOutlineSearch />
           </StIconSearch>
+
           {openSearch ? (
             <>
               <StForm onSubmit={onSearchHandler}>
@@ -41,13 +49,21 @@ const Header = () => {
                 <MdClose />
               </StIconCancel>
               <HeaderSearchModal />
+              <StModalBg onClick={openSearchHandler} />
             </>
           ) : (
             <StList>
               <li>내주변</li>
               <li>예약내역</li>
               <li>더보기</li>
-              <li>로그인</li>
+              {false ? (
+                <li onClick={() => navigate("/login")}>로그인</li>
+              ) : (
+                <li onMouseOver={() => setUserModal(true)} onMouseOut={() => setUserModal(false)}>
+                  <Gravatar onClick={() => navigate("/mypage")} style={{ borderRadius: "50%" }} email="a-email@example.com" size={29} default="mp" />
+                  <IoMdArrowDropdown />
+                </li>
+              )}
             </StList>
           )}
         </StWrap>
