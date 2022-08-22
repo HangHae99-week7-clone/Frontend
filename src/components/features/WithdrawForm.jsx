@@ -15,9 +15,16 @@ function WithdrawForm() {
 
   // popup error msg set
   useEffect(() => {
-    if (userState.result === false)
-    setPopUp({opacity:1, visibility:"visible"})
+    if (userState.result === false) {
+      setPopUp({opacity:1, visibility:"visible"})
       setTimeout(() => setPopUp({opacity: 0, visibility: "hidden"}), 1000)
+    } else if (userState.result === true) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
+      localStorage.removeItem('nickname');
+      alert("그 동안 여기어때를 이용해주셔서 감사합니다.")
+      window.location.assign('/')
+    }
   },[userState])
 
   // check withdraw user setting
