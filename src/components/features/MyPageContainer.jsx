@@ -38,8 +38,8 @@ function MyPageContainer() {
   // logout user
   function logoutConfirm (event) {
     event.preventDefault();
-    window.localstorage.removeItem('token');
-    window.location.assign('/main');
+    window.localStorage.clear();
+    window.location.assign('/');
   }
 
   // move page to withdraw site
@@ -150,7 +150,7 @@ const PageHeader = styled.div`
   padding: 0 2rem;
   margin: auto;
   width: 100vw;
-  height: 240px;
+  height: 210px;
 `
 
 const PageHeaderText = styled.h1`
@@ -161,7 +161,8 @@ const PageHeaderText = styled.h1`
   font-size:2.5rem;
   font-weight: 300;
   margin: 0 auto;
-  margin-top:7rem;
+  margin-top:6rem;
+  padding-left:1.7rem;
 
   width: 1024px;
   height: 250px;

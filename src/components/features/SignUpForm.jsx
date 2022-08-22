@@ -13,7 +13,6 @@ function SignUpForm () {
   const dispatch = useDispatch();
   const signUpState = useSelector(state=> state.user);
 
-  console.log(signUpState.result)
   // popup error msg set
   useEffect(() => {
     if (signUpState.result === false || signUpState.result === true)

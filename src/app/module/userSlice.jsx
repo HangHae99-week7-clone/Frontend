@@ -19,10 +19,8 @@ export const loginFetch = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await instance.post('/user/login', payload)
-      console.log(response)
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
-      console.log(error)
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -35,7 +33,6 @@ export const nicknameChangeFetch = createAsyncThunk(
       const response = await instance.put('/user/nicknamechange', payload)
       return thunkAPI.fulfillWithValue({result: response.data.result, nickname: payload.nicknamechange});
     } catch (error) {
-      console.log(error)
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -45,12 +42,14 @@ export const withdrawFetch = createAsyncThunk(
   'user/withdraw',
   async (payload, thunkAPI) => {
     try {
-      console.log(payload)
-      const response = await instance.delete('/user/delete', payload)
-      console.log(response)
+      const response = await instance.delete(`/user/delete`, { 
+        data: { 
+          password: payload.password 
+        },
+        withCredentials: true,
+      })
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
-      console.log(error)
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -122,12 +121,12 @@ const userSlice = createSlice({
       window.localStorage.setItem("nickname", action.payload.nickname)
       const newState = { ...state, 
         result: action.payload.result, 
-        error: action.payload.error 
+        error: action.payload.error,
+        nickname: action.payload.nickname
       }
       return newState;
     })
     builder.addCase(nicknameChangeFetch.rejected, (state, action) => {
-      console.log(action)
       const newState = { ...state, 
         result: action.payload.result, 
         error: action.payload.error 
@@ -140,8 +139,8 @@ const userSlice = createSlice({
       return state;
     })
     builder.addCase(withdrawFetch.fulfilled, (state, action) => {
-      window.localStorage.removeItem('token')
-      return state;
+      window.localStorage.clear();
+      return state = {...state, result: action.payload.result};
     })
     builder.addCase(withdrawFetch.rejected, (state, action) => {
       const newState = { ...state, 
