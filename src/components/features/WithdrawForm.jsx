@@ -1,28 +1,27 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
 import { AlertMessage, CommonBorder, CommonBtn, CommonForm, CommonInput, InfoTitle } from "../ui/styledSignUp";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { withdrawFetch } from "../../app/module/userSlice";
 
 function WithdrawForm() {
   const [btnState, setBtnState] = useState(false);
   const [popUp, setPopUp] = useState({opacity:0, visibility:"hidden"});
   const checkboxRef = useRef();
   const passwordRef = useRef();
-  // const dispatch = useDispatch();
-  // const userState = useSelector(state => state.sign)
-  // 받아올 데이터는 result와 msg로 처리하면 될 것 같다.
+  const dispatch = useDispatch();
+  const userState = useSelector(state => state.user)
 
-
-  // useEffect(() => {
-  //   if (userState.result === false)
-  //   setPopUp({opacity:1, visibility:"visible"})
-  //     setTimeout(() => setPopUp({opacity: 0, visibility: "hidden"}), 1000)
-  // },[userState])
+  // popup error msg set
+  useEffect(() => {
+    if (userState.result === false)
+    setPopUp({opacity:1, visibility:"visible"})
+      setTimeout(() => setPopUp({opacity: 0, visibility: "hidden"}), 1000)
+  },[userState])
 
   // check withdraw user setting
   function checkWithdrawSet() {
-    console.log(checkboxRef.current.checked)
     if (checkboxRef.current.checked === false)
       return setBtnState(false)
     if (passwordRef.current.value === "" || passwordRef.current.value.length < 8)
@@ -38,7 +37,7 @@ function WithdrawForm() {
       return
     if (popUp.opacity === 1)
       return
-    // dispatch();
+    dispatch(withdrawFetch({password : passwordRef.current.value}));
   }
 
   // move to prev page
@@ -48,7 +47,7 @@ function WithdrawForm() {
 
   return (
     <WithdrawContainer>
-      <h1 style={{textAlign: "center", fontSize:"24px", margin:"4rem 0 1rem 0" }}>회원탈퇴</h1>
+      <h1 style={{textAlign: "center", fontSize:"24px", margin:"0 0 1rem 0" }}>회원탈퇴</h1>
       <ReasonSpace>
         <InfoTitle>왜 떠나시는지 <br /> <span>이유</span>가 있을까요?</InfoTitle>
         <ReasonTextArea placeholder="(선택사항) 서비스 이용 중 아쉬운 점에 대해 알려주세요. 고객님의 소리에 귀 기울일게요. 80자 이내" maxLength={80} />
@@ -80,7 +79,7 @@ function WithdrawForm() {
           <p style={{fontSize:"16px", marginBottom:"1rem"}}>비밀번호 입력</p>
           <CommonInput type="password" placeholder="비밀번호를 입력하세요." ref={passwordRef} background="#f5f5f5" border="none" fontSize="16px" placeholderSize="16px" activeBorder="none" margin="0 0 1rem 0" onChange={checkWithdrawSet} />
           <CommonBtn type="submit" background={btnState ? "#eb4242" : "#fafafa"} fontColor={btnState ? "#ffffff" : "#d2d2d2"} margin="8px 0 8px 0">진짜 안녕</CommonBtn>
-          <AlertMessage opacity={popUp.opacity} visibility={popUp.visibility} top="25px" left="54px">비밀번호가 일치하지 않습니다.<br />다시 확인해주세요.</AlertMessage>
+          <AlertMessage opacity={popUp.opacity} visibility={popUp.visibility} top="25px" left="54px">{userState.error}</AlertMessage>
         </CommonForm>
         <CommonBtn type="button" fontColor="#37373f" background="#ffffff" border="1px solid #cccccc" margin="8px 0 8px 0" onClick={moveToMyPage}>돌아가기</CommonBtn>
       </InfoSpace>
@@ -100,7 +99,6 @@ const WithdrawContainer = styled.div`
   font-family: "Pretendard-Regular";
 
   width: 370px;
-
   margin:0 auto;
 
   box-sizing: border-box;

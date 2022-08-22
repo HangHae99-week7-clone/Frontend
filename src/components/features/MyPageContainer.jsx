@@ -5,22 +5,27 @@ import { AlertMessage, CommonBorder, CommonBtn, CommonForm, CommonInput, CommonR
 import { RED } from "../../utils/colorPalette";
 import { useDispatch, useSelector } from "react-redux";
 import { nicknameList1, nicknameList2 } from "../../utils/reqList";
+import { nicknameChangeFetch } from "../../app/module/userSlice";
 
 function MyPageContainer() {
   const [mode, setMode] = useState("read");
   const [popUp, setPopUp] = useState({opacity: 0, visibility: "hidden"});
   const inputRef = useRef();
   const dispatch = useDispatch();
-  // const userState = useSelector(state => state.sign)
-  // 작성하면서 생각하니 signup/signin으로 많이들 표현함.
-  // 받아올 데이터는 result와 msg로 처리하면 될 것 같다.
+  const userState = useSelector(state => state.user)
 
-  // useEffect(() => {
-  //   if (userState.result === false)
-  //     nicknameChangeError()
-  // },[userState])
+  if (localStorage.getItem('token') === null) {
+    alert("잘못된 접근입니다.")
+    window.location.assign('/')
+  }
 
-
+  // popup error msg set
+  useEffect(() => {
+    if (userState.result === false)
+      nicknameChangeError()
+    else if (userState.result === true)
+      window.location.reload('/')
+  }, [userState])
 
   // view message by error to change nickname
   function nicknameChangeError() {
@@ -60,10 +65,10 @@ function MyPageContainer() {
   function changeNickname(event) {
     if (inputRef.current.value === "")
       return false
-    if (popUp.opacity === 1)
+    else if (popUp.opacity === 1)
       return false
       
-    dispatch();
+    dispatch(nicknameChangeFetch({nicknamechange : inputRef.current.value}));
   }
 
 
@@ -94,7 +99,7 @@ function MyPageContainer() {
           <>
             <CommonRowBox margin="2rem 0 0 0">
               <ProfileText>닉네임</ProfileText>
-              <ProfileNickName>술취한너구리</ProfileNickName>
+              <ProfileNickName>{userState.nickname}</ProfileNickName>
             </CommonRowBox>
             <CommonBtn type="button" fontColor="#37373f" background="#ffffff" border="1px solid #cccccc" height="42px" padding="0.5rem 4rem" margin="1rem auto 1rem 0" onClick={changeMode} >수정</CommonBtn>
           </>
@@ -106,7 +111,7 @@ function MyPageContainer() {
                 <CommonBtn type="button" fontColor="#ffffff" background="#fb0552" height="42px" padding="0.5rem 1rem" margin="0 2rem 0 0" fontSize="16px" onClick={createRandomNickname}>딴거할래요</CommonBtn>
               </CommonRowBox>
               <CommonRowBox style={{position:"relative"}}>
-                <AlertMessage opacity={popUp.opacity} visibility={popUp.visibility} top="-70px">이미 존재하는 닉네임입니다.<br />다른 닉네임으로 변경해주세요.</AlertMessage>
+                <AlertMessage opacity={popUp.opacity} visibility={popUp.visibility} top="-70px">{userState.error}</AlertMessage>
                 <CommonBtn type="button" fontColor="#ffffff" background="#fb0552" height="42px" padding="0.5rem 2rem" margin="1rem 2rem 1rem 0" fontSize="16px" onClick={changeNickname}>수정완료</CommonBtn>
                 <CommonBtn type="button" fontColor="#37373f" background="#ffffff" border="1px solid #cccccc" height="42px" padding="0.5rem 2rem" margin="1rem 1rem 1rem 0" fontSize="16px" onClick={changeMode}>수정취소</CommonBtn>
               </CommonRowBox>
