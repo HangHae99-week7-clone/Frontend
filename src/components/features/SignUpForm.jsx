@@ -3,24 +3,29 @@ import styled from "styled-components";
 import { emailFormat, nicknameList1, nicknameList2, passwordFormat } from "../../utils/reqList";
 import { CommonBtn, CommonInput, CommonRowBox, ErrorText, LogoBox, LogoImage, PopUpBackground, PopUpModal, PopUpMsg } from "../ui/styledSignUp";
 import { useDispatch, useSelector } from "react-redux";
+import { signUpFetch } from "../../app/module/userSlice";
 
 function SignUpForm () {
-  const [signUpData, setsignUpData] = useState({email: "", password: "", confirmPassword:"", nickname: ""})
-  const [checkState, setCheckState] = useState({email:"none", password:"none", confirmPassword:"none"});
+  const [signUpData, setsignUpData] = useState({email: "", password: "", confirm:"", nickname: ""})
+  const [checkState, setCheckState] = useState({email:"none", password:"none", confirm:"none"});
   const [btnState, setBtnState] = useState({background:"#fafafa", color: "#d4d4d4"});
   const [popUp, setPopUp] = useState(false);
   const dispatch = useDispatch();
-  // const signUpState = useSelector(state=> state.sign);
-  // 작성하면서 생각하니 signup/signin으로 많이들 표현함.
-  // 받아올 데이터는 result와 msg로 처리하면 될 것 같다.
+  const signUpState = useSelector(state=> state.user);
 
-// useEffect(() => {
-//   if (signUpState.result === false)
-//     setPopUp(true)
-// },[signUpState])
+  console.log(signUpState.result)
+  // popup error msg set
+  useEffect(() => {
+    if (signUpState.result === false || signUpState.result === true)
+      setPopUp(true)
+  },[signUpState])
 
+  // closePopUp
   function closeToPopUp() {
-    setPopUp(false)
+    if (signUpState.result === false)
+      setPopUp(false)
+    else if (signUpState.result === true)
+      window.location.assign("/login")
   }
 
   // button active check
@@ -35,7 +40,7 @@ function SignUpForm () {
   function inputSignUpData (event) {
     const { name, value } = event.target;
     setsignUpData({ ...signUpData, [name]:value })
-    if (checkState.email === "none" || checkState.password === "none" || checkState.confirmPassword === "none");
+    if (checkState.email === "none" || checkState.password === "none" || checkState.confirm === "none");
       setCheckState({...checkState, [name]:"block"})
   }
 
@@ -48,18 +53,18 @@ function SignUpForm () {
   function checkSignUpData () {
     if (signUpData.email.length !== 0 && emailFormat.test(signUpData.email))
       if (signUpData.password.length !== 0 && signUpData.password.length >= 8 && passwordFormat.test(signUpData.password))
-        if (signUpData.confirmPassword.length !== 0 && signUpData.password === signUpData.confirmPassword)
+        if (signUpData.confirm.length !== 0 && signUpData.password === signUpData.confirm)
           if (signUpData.nickname.length > 0)
             return true
     else
       return false
   }
 
+  // create random Nickname
   function createRandomNickname() {
     const randomNickName = nicknameList1[Math.floor(Math.random()*nicknameList1.length)] + nicknameList2[Math.floor(Math.random()*nicknameList2.length)]
     setsignUpData({ ...signUpData, nickname:randomNickName })
   }
-
 
   //submit data for register db
   function confirmSignUpData (event) {
@@ -67,22 +72,22 @@ function SignUpForm () {
     if (checkSignUpData() === false)
       return
     
-    dispatch();
+    dispatch(signUpFetch(signUpData));
   }
 
   // 데이터 받은 뒤에 userSlice 통해서 받을 state 에러 로직만 만들면 된다.
 
   return (
     <>
-      {/* {popUp === false ? <></> : 
+      {popUp === false ? <></> : 
       <PopUpBackground>
         <PopUpModal>
           <PopUpMsg>
-            {signUpState.msg}
+            {signUpState.result === false ? signUpState.error : "가입이 완료되었습니다! \n 여기어때에 오신 고객님을 환영합니다!"}
             </PopUpMsg>
           <CommonBtn type="button" onClick={closeToPopUp} background="#fb0552" fontColor="#ffffff" width="100%" padding="0 3rem" margin="0">확인</CommonBtn>
         </PopUpModal>
-      </PopUpBackground>} */}
+      </PopUpBackground>}
       <SignUpFormContainer>
         <LogoBox>
           <LogoImage src="https://image.goodchoice.kr/images/web_v3/ic_bi_yeogi_250px.png" alt="GoodChoice Inc. Logo" onClick={moveToMain}/>
@@ -110,12 +115,12 @@ function SignUpForm () {
                                 // password format check
                                     "　" : "사용불가 : 영문,숫자,특수문자 중 2가지 이상을 조합해주세요."}</ErrorText>
           <SignUpLabel>비밀번호 확인</SignUpLabel>
-          <CommonInput name="confirmPassword" type="password" border="1px solid #ececec" value={signUpData.confirmPassword} onChange={inputSignUpData} />
-          <ErrorText>{checkState.confirmPassword === "none" ? 
+          <CommonInput name="confirm" type="password" border="1px solid #ececec" value={signUpData.confirm} onChange={inputSignUpData} />
+          <ErrorText>{checkState.confirm === "none" ? 
                         // first input data
-                        "　" : signUpData.confirmPassword.length === 0 ? 
+                        "　" : signUpData.confirm.length === 0 ? 
                             // length check
-                            "비밀번호를 한번 더 입력해주세오." : signUpData.password === signUpData.confirmPassword ?
+                            "비밀번호를 한번 더 입력해주세오." : signUpData.password === signUpData.confirm ?
                                 // comparison password and confirm password 
                                 "　" : "비밀번호가 일치하지 않습니다." }</ErrorText>
           <SignUpLabel>닉네임</SignUpLabel>
@@ -141,7 +146,7 @@ const SignUpFormContainer = styled.div`
 
   width: 370px;
   height: 500px;
-  margin:15vh auto;
+  margin:auto;
 
   box-sizing: border-box;
 `
