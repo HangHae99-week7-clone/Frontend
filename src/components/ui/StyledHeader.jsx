@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { GRAY_9, RED, WHITE } from "../../utils/colorPalette";
 
 const StHeader = styled.header`
@@ -53,15 +53,15 @@ const StIconSearch = styled.div`
   cursor: pointer;
   position: absolute;
   display: flex;
-  left: 200px;
   color: ${GRAY_9};
+  transition-duration: 0.5s;
 `;
 
 const StIconCancel = styled.div`
   cursor: pointer;
   position: absolute;
   display: flex;
-  left: 630px;
+  right: 30px;
   font-size: 24px;
   color: ${GRAY_9};
 `;

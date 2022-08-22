@@ -9,7 +9,7 @@ import HeaderSearchModal from "../features/HeaderSearchModal";
 const Header = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
-  const [modal, setModal] = useState(false);
+  const [openSearch, setOpenSearch] = useState(false);
 
   const onChangeHandler = (event) => {
     setSearch(event.target.value);
@@ -20,8 +20,8 @@ const Header = () => {
     dispatch();
   };
 
-  const onClickModalHandler = () => {
-    setModal((prev) => !prev);
+  const openSearchHandler = () => {
+    setOpenSearch((prev) => !prev);
   };
 
   return (
@@ -29,24 +29,29 @@ const Header = () => {
       <StHeader>
         <StWrap>
           <StLogo src={LOGO_WHITE} />
-          <StIconSearch onClick={onClickModalHandler}>
+          <StIconSearch style={{ right: openSearch ? "810px" : "400px" }} onClick={openSearch ? onSearchHandler : openSearchHandler}>
             <FaSearch />
           </StIconSearch>
-          <StForm onSubmit={onSearchHandler}>
-            <input type="text" autoFocus value={search} onChange={onChangeHandler} placeholder="지역, 숙소명" />
-          </StForm>
-          <StIconCancel>
-            <MdClose />
-          </StIconCancel>
-          <StList>
-            <li>내주변</li>
-            <li>예약내역</li>
-            <li>더보기</li>
-            <li>로그인</li>
-          </StList>
+          {openSearch ? (
+            <>
+              <StForm onSubmit={onSearchHandler}>
+                <input type="text" autoFocus value={search} onChange={onChangeHandler} placeholder="지역, 키워드" />
+              </StForm>
+              <StIconCancel onClick={openSearchHandler}>
+                <MdClose />
+              </StIconCancel>
+              <HeaderSearchModal />
+            </>
+          ) : (
+            <StList>
+              <li>내주변</li>
+              <li>예약내역</li>
+              <li>더보기</li>
+              <li>로그인</li>
+            </StList>
+          )}
         </StWrap>
       </StHeader>
-      {modal ? <HeaderSearchModal /> : null}
     </>
   );
 };
