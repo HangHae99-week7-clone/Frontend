@@ -69,11 +69,11 @@ const StIconCancel = styled.div`
 `;
 
 const StList = styled.ul`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  right: 30px;
   cursor: pointer;
+  position: absolute;
+  display: flex;
+  right: 30px;
+  align-items: center;
   gap: 40px;
   font-size: 18px;
   color: ${GRAY_8};
@@ -88,6 +88,7 @@ const StList = styled.ul`
   }
 `;
 
+//모달 클릭시 검은 배경
 const StModalBg = styled.div`
   position: fixed;
   top: 80px;

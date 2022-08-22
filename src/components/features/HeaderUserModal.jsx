@@ -5,9 +5,10 @@ import { GRAY_8, WHITE } from "../../utils/colorPalette";
 
 const HeaderUserModal = () => {
   const navigate = useNavigate();
+
   return (
     <StUserModal>
-      <div>닉네임</div>
+      <h1>닉네임</h1>
       <hr />
       <ul>
         <li onClick={() => navigate("/mapage")}>내정보</li>
@@ -23,19 +24,24 @@ const HeaderUserModal = () => {
 
 export default HeaderUserModal;
 
+//유저 모달 박스
 const StUserModal = styled.div`
   position: absolute;
   top: 60px;
   right: -45px;
   width: 220px;
+  padding: 30px;
   border-radius: 5px;
-
   background-color: ${WHITE};
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-
-  padding: 30px;
   z-index: 9999;
 
+  //유저 닉네임
+  h1 {
+    font-family: "Pretendard-Bold";
+  }
+
+  //구분선
   hr {
     margin: 20px 0;
     border: 0;
@@ -43,6 +49,7 @@ const StUserModal = styled.div`
     background-color: ${GRAY_8};
   }
 
+  //유저 모달 리스트
   ul {
     display: flex;
     flex-direction: column;
