@@ -47,9 +47,9 @@ const Search = () => {
           <StRightBox>
             {result.length ? (
               result.map((item) => (
-                <StContentsBox key={item.postId}>
+                <StContentsBox key={item.postId} onClick={() => window.location.assign(`/detail/${item.postId}`)}>
                   <StImageBox>
-                    <img src={item.image} alt={item.postId} />
+                    <img src={item.images} alt={item.postId} />
                     <div>{item.category}</div>
                   </StImageBox>
 
