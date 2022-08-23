@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import instance from "./instance";
 
 const initialState = {
   result: [],
@@ -10,7 +10,7 @@ const initialState = {
 //검색 결과 GET 요청
 export const __getKeywordSearch = createAsyncThunk("get/search", async (keyword, thunkAPI) => {
   try {
-    const { data } = await axios.get(`${process.env.REACT_APP_API}/post/search?keyword=${keyword}`);
+    const { data } = await instance.get(`/post/search?keyword=${keyword}`);
     return thunkAPI.fulfillWithValue(data.Result);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
