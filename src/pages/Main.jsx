@@ -66,7 +66,7 @@ const Main = () => {
 export default Main;
 
 const StMainImage = styled.div`
-  margin-top: 130px;
+  margin-top: 50px;
   margin-bottom: 50px;
   background-image: url("https://image.goodchoice.kr/images/web_v3/mainspot_220531.png");
   background-repeat: no-repeat;
