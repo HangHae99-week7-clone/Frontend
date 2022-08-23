@@ -5,10 +5,17 @@ import { GRAY_8, WHITE } from "../../utils/colorPalette";
 
 const HeaderUserModal = () => {
   const navigate = useNavigate();
+  const userNickname = localStorage.getItem("nickname");
+
+  const onLogoutHandler = (event) => {
+    event.preventDefault();
+    window.localStorage.clear();
+    window.location.assign("/");
+  };
 
   return (
     <StUserModal>
-      <h1>닉네임</h1>
+      <h1>{userNickname}</h1>
       <hr />
       <ul>
         <li onClick={() => navigate("/mapage")}>내정보</li>
@@ -16,7 +23,7 @@ const HeaderUserModal = () => {
         <li>쿠폰함</li>
         <li>예약내역</li>
         <li>알림설정</li>
-        <li>로그아웃</li>
+        <li onClick={onLogoutHandler}>로그아웃</li>
       </ul>
     </StUserModal>
   );
