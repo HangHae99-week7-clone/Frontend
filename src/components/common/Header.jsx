@@ -32,7 +32,8 @@ const Header = () => {
   const onSearchHandler = (event) => {
     event.preventDefault();
     if (search.trim().length === 0) {
-      alert("검색어가 없습니다. 검색어를 입력하세요."); //값이 비어있다면 alert창
+      // alert("검색어가 없습니다. 검색어를 입력하세요."); //값이 비어있다면 alert창
+      window.location.assign("/search");
     } else {
       window.location.assign(`/search?keyword=${search}`); //검색값을 쿼리스트링으로 넘기고 해당 페이지로 이동
     }
