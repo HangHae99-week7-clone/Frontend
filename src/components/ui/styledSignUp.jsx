@@ -72,6 +72,8 @@ export const LogoImage = styled.img`
 `
 
 export const CommonRowBox = styled.div`
+  background: ${props => props.background};
+
   display: flex;
   flex-direction: row;
   justify-content: ${props => props.justifyContent};
@@ -79,7 +81,7 @@ export const CommonRowBox = styled.div`
 
   padding: ${props => props.padding};
   margin: ${props => props.margin};
-  `
+`
 
 export const CommonForm = styled.form`
   display: flex;
@@ -103,9 +105,9 @@ export const CommonBorder = styled.div`
 `
 
 export const CommonText = styled.p`
-  font-family: "Pretendard-Regular";
-  font-size: 18px;
-  font-weight: 500;
+  font-family: ${props=>props.fontFamily || "Pretendard-Regular"};
+  font-size: ${props=>props.fontSize || "18px"};
+  font-weight: ${props=>props.fontWeight || "500"};
   color: ${props=>props.color || "#000000"};
 
   padding: ${props => props.padding};
@@ -183,6 +185,20 @@ export const AlertMessage = styled.div`
   left:${props=>props.left};
   opacity: ${props => props.opacity};
   visibility: ${props => props.visibility};
-  transition: visibility 0.5s;
+  transition: opacity 0.5s;
   z-index: 5;
+`
+
+export const CommonColumnBox = styled.div`
+  background: ${props => props.background};
+
+  display: flex;
+  flex-direction: column;
+  justify-content: ${props => props.justifyContent};
+  align-items: ${props => props.alignItems};
+
+  padding: ${props => props.padding};
+  margin: ${props => props.margin};
+
+  width: ${props => props.width};
 `
