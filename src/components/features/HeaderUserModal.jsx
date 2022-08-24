@@ -7,8 +7,7 @@ const HeaderUserModal = () => {
   const navigate = useNavigate();
   const userNickname = localStorage.getItem("nickname");
 
-  const onLogoutHandler = (event) => {
-    event.preventDefault();
+  const onLogoutHandler = () => {
     window.localStorage.clear();
     window.location.assign("/");
   };
@@ -18,7 +17,7 @@ const HeaderUserModal = () => {
       <h1>{userNickname}</h1>
       <hr />
       <ul>
-        <li onClick={() => navigate("/mapage")}>내정보</li>
+        <li onClick={() => navigate("/mypage")}>내정보</li>
         <li>포인트</li>
         <li>쿠폰함</li>
         <li>예약내역</li>
@@ -61,5 +60,6 @@ const StUserModal = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    cursor: pointer;
   }
 `;
