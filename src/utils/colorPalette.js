@@ -8,3 +8,4 @@ export const GRAY_8 = "#DDDDDD";
 export const GRAY_7 = "#EBEBEB";
 export const GRAY_6 = "#9D9D9D";
 export const YELLOW = "#FFA726";
+export const PINK = "#F2074C";
