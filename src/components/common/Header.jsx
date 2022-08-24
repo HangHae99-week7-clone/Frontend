@@ -2,22 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StForm, StHeader, StIconSearch, StIconCancel, StList, StLogo, StWrap, StModalBg } from "../ui/StyledHeader";
 import HeaderSearchModal from "../features/HeaderSearchModal";
-import HeaderUserModal from "../features/HeaderUserModal";
+import HeaderUserModal, { LightTooltip } from "../features/HeaderUserModal";
 import Gravatar from "react-gravatar";
 import LOGO_WHITE from "../../images/LOGO_WHITE.png";
 import LOGO_RED from "../../images/LOGO_RED.png";
+import { BLACK, WHITE } from "../../utils/colorPalette";
 /////////////////////////////////////////////////////////////////
 //아이콘 임포트
 import { HiOutlineSearch } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 /////////////////////////////////////////////////////////////////
+import Button from "@mui/material/Button";
 
 const Header = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState(""); //검색어 관리 State
   const [openSearch, setOpenSearch] = useState(false); //검색창 on/off 관리 State
-  const [userModal, setUserModal] = useState(false); //유저모달 on/off 관리 State
   const [isScroll, setIsScroll] = useState(false);
 
   useEffect(() => {
@@ -51,8 +52,6 @@ const Header = () => {
     <>
       <StHeader isScroll={isScroll}>
         <StWrap>
-          {userModal ? <HeaderUserModal /> : null}
-
           <StLogo src={isScroll ? LOGO_RED : LOGO_WHITE} onClick={() => window.location.assign("/")} />
 
           <StIconSearch isScroll={isScroll} style={{ right: openSearch ? "810px" : "400px" }} onClick={openSearch ? onSearchHandler : openSearchHandler}>
@@ -80,9 +79,12 @@ const Header = () => {
               <li>더보기</li>
               {localStorage.token ? (
                 <li>
-                  <Gravatar onClick={() => navigate("/mypage")} style={{ borderRadius: "50%" }} email="a-email@example.com" size={29} default="mp" />
-
-                  <IoMdArrowDropdown />
+                  <LightTooltip title={<HeaderUserModal />}>
+                    <Button>
+                      <Gravatar onClick={() => navigate("/mypage")} style={{ borderRadius: "50%" }} email="a-email@example.com" size={29} default="mp" />
+                      <IoMdArrowDropdown style={{ marginLeft: "5px", color: isScroll ? BLACK : WHITE }} />
+                    </Button>
+                  </LightTooltip>
                 </li>
               ) : (
                 <li onClick={() => navigate("/login")}>로그인</li>

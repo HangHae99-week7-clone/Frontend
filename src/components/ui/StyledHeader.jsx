@@ -75,7 +75,7 @@ const StList = styled.ul`
   display: flex;
   right: 30px;
   align-items: center;
-  gap: 40px;
+  gap: 32px;
   font-size: 18px;
   color: ${(props) => (props.isScroll ? BLACK : GRAY_8)};
 
@@ -85,6 +85,16 @@ const StList = styled.ul`
 
     &:hover {
       color: ${(props) => (props.isScroll ? BLACK : WHITE)};
+    }
+
+    button {
+      padding: 0;
+      margin-left: -20px;
+      transform: translateX(10px);
+
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
 `;
