@@ -12,6 +12,8 @@ function LoginForm () {
   const [popUp2, setpopUp2] = useState({opacity: 0, visibility: "hidden"});
   const dispatch = useDispatch();
   const loginState = useSelector(state=> state.user);
+  // state 2개를 사용
+  // 이벤트로 transition end -> 잘 활용해보겠습니다!
 
   // popup error msg set
   useEffect(() => {
@@ -105,6 +107,7 @@ const LoginFormContainer = styled.div`
   width: 370px;
   height: 700px;
   margin:auto;
+  margin-top: 2rem;
 
   box-sizing: border-box;
 `

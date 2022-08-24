@@ -92,7 +92,7 @@ function MyPageContainer() {
         <PageDetail>
           <PageName>내 정보 수정</PageName>
           <PageAvatar>
-            <Gravatar style={{borderRadius:"50%"}} email="a-email@example.com" size={128} default="mp" />
+            <Gravatar style={{borderRadius:"50%"}} email={userState.email} size={128} default="mp" />
           </PageAvatar>
           <ProfileEmail>developneoguri@gmail.com</ProfileEmail>
           {mode === "read" ?
