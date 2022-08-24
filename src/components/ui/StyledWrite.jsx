@@ -48,4 +48,15 @@ const StSubmit = styled.button`
   color: ${WHITE};
 `;
 
-export { StLayout, StSubmit, StTable };
+const StImagePreview = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  img {
+    height: 200px;
+    border: 1px solid ${GRAY_8};
+  }
+`;
+
+export { StLayout, StSubmit, StTable, StImagePreview };

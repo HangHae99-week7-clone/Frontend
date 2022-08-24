@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { StLayout, StSubmit, StTable } from "../components/ui/StyledWrite";
+import { StLayout, StSubmit, StTable, StImagePreview } from "../components/ui/StyledWrite";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import instance from "../app/module/instance";
+import { selectCategory, selectLocation, selectKeyword } from "../utils/selectList";
 /////////////////////////////////////////////////////////////////
 //MUI 관련 임포트
 import TextField from "@mui/material/TextField";
@@ -29,27 +29,21 @@ import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 const Write = () => {
-  const selectCategory = ["모텔", "호텔", "펜션", "캠핑"];
-  const selectLocation = ["서울", "경기", "강원", "충남", "충북", "전남", "전북", "경남", "경북", "제주"];
-  const selectKeyword = ["오션뷰", "파티룸", "야외수영장", "애견동반", "조식", "호캉스"];
-
   const initialState = {
     images: "",
     placename: "",
     category: "",
     location: "",
-    keyword: "",
     message: "",
-    content: "",
+    keyword: "",
     roomtitle: "",
     roomcharge: "",
     roomimage: "",
+    content: "",
   };
   const [contents, setContents] = useState(initialState);
-  const [roomImage, setRoomImage] = useState([]);
-  const keyword1Ref = useRef();
-  const keyword2Ref = useRef();
-  const keyword3Ref = useRef();
+  const [keyword, setKeyword] = useState({});
+  const [roomImage, setRoomImage] = useState({});
   const editorRef = useRef();
   const roomtitle1Ref = useRef();
   const roomtitle2Ref = useRef();
@@ -61,17 +55,24 @@ const Write = () => {
     setContents({ ...contents, [name]: value });
   };
 
+  const onKeywordHandler = (event) => {
+    const { name, value } = event.target;
+    setKeyword({ ...keyword, [name]: value });
+  };
+
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     const value = {
       ...contents,
       content: editorRef.current?.getInstance().getHTML(),
-      keyword: `${keyword1Ref.current?.value},${keyword2Ref.current?.value},${keyword3Ref.current?.value}`,
+      keyword: `${keyword.keyword1},${keyword.keyword2},${keyword.keyword3}`,
       roomtitle: `${roomtitle1Ref.current?.value},${roomtitle2Ref.current?.value}`,
       roomcharge: `${roomcharge1Ref.current?.value},${roomcharge2Ref.current?.value}`,
-      roomimage: roomImage.join(","),
+      roomimage: `${roomImage.roomImage1},${roomImage.roomImage2}`,
     };
     await instance.post("/post", value);
+    alert("숙소 등록이 완료되었습니다");
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -97,13 +98,17 @@ const Write = () => {
       .then((data) => {
         if (name === "image") {
           setContents({ ...contents, images: data.location });
-        } else {
-          setRoomImage([...roomImage, data.location]);
+        } else if (name === "roomImage1") {
+          setRoomImage({ ...roomImage, roomImage1: data.location });
+        } else if (name === "roomImage2") {
+          setRoomImage({ ...roomImage, roomImage2: data.location });
         }
       })
       .catch((err) => console.log(err));
   };
   /////////////////////////////////////////////////////////////////
+
+  console.log(keyword);
 
   return (
     <>
@@ -113,8 +118,13 @@ const Write = () => {
         <StTable>
           <tbody>
             <tr>
-              <th scope="row">숙소 이미지(1장)</th>
+              <th scope="row">숙소 이미지</th>
               <td>
+                {contents.images && (
+                  <StImagePreview>
+                    <img src={contents.images} />
+                  </StImagePreview>
+                )}
                 <IconButton color="error" aria-label="upload picture" component="label">
                   <input hidden type="file" name="image" accept="image/*" onChange={(event) => handleFileInput(event)} />
                   <PhotoCamera />
@@ -157,7 +167,7 @@ const Write = () => {
               <td style={{ display: "flex", gap: "10px" }}>
                 <FormControl fullWidth size="small">
                   <InputLabel>키워드1</InputLabel>
-                  <Select inputRef={keyword1Ref} label="키워드1">
+                  <Select name="keyword1" value={keyword.keyword1 || ""} onChange={onKeywordHandler} label="키워드1">
                     {selectLocation.map((value) => (
                       <MenuItem key={value} value={value}>
                         {value}
@@ -167,7 +177,7 @@ const Write = () => {
                 </FormControl>
                 <FormControl fullWidth size="small">
                   <InputLabel>키워드2</InputLabel>
-                  <Select inputRef={keyword2Ref} label="키워드2">
+                  <Select name="keyword2" value={keyword.keyword2 || ""} onChange={onKeywordHandler} label="키워드2">
                     {selectKeyword.map((value) => (
                       <MenuItem key={value} value={value}>
                         {value}
@@ -177,7 +187,7 @@ const Write = () => {
                 </FormControl>
                 <FormControl fullWidth size="small">
                   <InputLabel>키워드3</InputLabel>
-                  <Select inputRef={keyword3Ref} label="키워드3">
+                  <Select name="keyword3" value={keyword.keyword3 || ""} onChange={onKeywordHandler} label="키워드3">
                     {selectKeyword.map((value) => (
                       <MenuItem key={value} value={value}>
                         {value}
@@ -219,23 +229,37 @@ const Write = () => {
               <th rowSpan={2} scope="row">
                 객실 정보
               </th>
-              <td style={{ display: "flex", gap: "10px" }}>
-                <IconButton color="error" aria-label="upload picture" component="label">
-                  <input hidden type="file" name="roomimage1" accept="image/*" onChange={(event) => handleFileInput(event)} />
-                  <PhotoCamera />
-                </IconButton>
-                <TextField type="text" label="객실명" inputRef={roomtitle1Ref} size="small" fullWidth />
-                <TextField type="text" label="객실가격" inputRef={roomcharge1Ref} size="small" fullWidth />
+              <td>
+                {roomImage.roomImage1 && (
+                  <StImagePreview style={{ marginBottom: "10px" }}>
+                    <img src={roomImage.roomImage1} />
+                  </StImagePreview>
+                )}
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <IconButton color="error" aria-label="upload picture" component="label">
+                    <input hidden type="file" name="roomImage1" accept="image/*" onChange={(event) => handleFileInput(event)} />
+                    <PhotoCamera />
+                  </IconButton>
+                  <TextField type="text" label="객실명" inputRef={roomtitle1Ref} size="small" fullWidth />
+                  <TextField type="text" label="객실가격" inputRef={roomcharge1Ref} size="small" fullWidth />
+                </div>
               </td>
             </tr>
             <tr>
-              <td style={{ display: "flex", gap: "10px" }}>
-                <IconButton color="error" aria-label="upload picture" component="label">
-                  <input hidden type="file" name="roomimage2" accept="image/*" onChange={(event) => handleFileInput(event)} />
-                  <PhotoCamera />
-                </IconButton>
-                <TextField type="text" label="객실명" inputRef={roomtitle2Ref} size="small" fullWidth />
-                <TextField type="text" label="객실가격" inputRef={roomcharge2Ref} size="small" fullWidth />
+              <td>
+                {roomImage.roomImage2 && (
+                  <StImagePreview style={{ marginBottom: "10px" }}>
+                    <img src={roomImage.roomImage2} />
+                  </StImagePreview>
+                )}
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <IconButton color="error" aria-label="upload picture" component="label">
+                    <input hidden type="file" name="roomImage2" accept="image/*" onChange={(event) => handleFileInput(event)} />
+                    <PhotoCamera />
+                  </IconButton>
+                  <TextField type="text" label="객실명" inputRef={roomtitle2Ref} size="small" fullWidth />
+                  <TextField type="text" label="객실가격" inputRef={roomcharge2Ref} size="small" fullWidth />
+                </div>
               </td>
             </tr>
           </tbody>
