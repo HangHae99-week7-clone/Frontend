@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GRAY_8, GRAY_9, RED, WHITE } from "../../utils/colorPalette";
+import { BLACK, GRAY_8, GRAY_9, RED, WHITE } from "../../utils/colorPalette";
 
 const StHeader = styled.header`
   position: fixed;
@@ -8,8 +8,10 @@ const StHeader = styled.header`
   display: flex;
   width: 100%;
   height: 80px;
-  background-color: ${RED};
+  background-color: ${(props) => (props.isScroll ? WHITE : RED)};
   z-index: 999;
+  box-shadow: ${(props) => (props.isScroll ? "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px" : "none")};
+  transition-duration: 0.3s;
 `;
 
 const StWrap = styled.div`
@@ -38,7 +40,7 @@ const StForm = styled.form`
     width: 400px;
     height: 40px;
     font-size: 18px;
-    color: ${WHITE};
+    color: ${(props) => (props.isScroll ? BLACK : WHITE)};
 
     &:focus {
       outline: none;
@@ -54,9 +56,8 @@ const StIconSearch = styled.div`
   cursor: pointer;
   position: absolute;
   display: flex;
-  color: ${GRAY_8};
+  color: ${(props) => (props.isScroll ? BLACK : GRAY_8)};
   font-size: 21px;
-  transition-duration: 0.5s;
 `;
 
 const StIconCancel = styled.div`
@@ -65,7 +66,7 @@ const StIconCancel = styled.div`
   display: flex;
   right: 30px;
   font-size: 24px;
-  color: ${GRAY_9};
+  color: ${(props) => (props.isScroll ? BLACK : GRAY_9)};
 `;
 
 const StList = styled.ul`
@@ -76,14 +77,14 @@ const StList = styled.ul`
   align-items: center;
   gap: 40px;
   font-size: 18px;
-  color: ${GRAY_8};
+  color: ${(props) => (props.isScroll ? BLACK : GRAY_8)};
 
   li {
     display: flex;
     align-items: center;
 
     &:hover {
-      color: ${WHITE};
+      color: ${(props) => (props.isScroll ? BLACK : WHITE)};
     }
   }
 `;
