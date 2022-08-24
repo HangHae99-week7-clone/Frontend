@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GRAY_10, GRAY_6, GRAY_7, GRAY_9, WHITE, YELLOW } from "../../utils/colorPalette";
+import { PINK, GRAY_10, GRAY_6, GRAY_7, GRAY_9, WHITE, YELLOW } from "../../utils/colorPalette";
 
 const StKeywordDiv = styled.div`
   display: flex;
@@ -37,11 +37,13 @@ const StLeftBox = styled.div`
   h2 {
     font-family: "Pretendard-Bold";
     font-size: 18px;
+    margin-bottom: 12px;
   }
 
   h3 {
     font-family: "Pretendard-Bold";
-    color: ${GRAY_6};
+    color: ${GRAY_10};
+    margin-bottom: 18px;
   }
 `;
 
@@ -77,8 +79,8 @@ const StImageBox = styled.div`
     color: ${GRAY_9};
     font-size: 14px;
     text-align: center;
-    top: 8px;
-    right: 8px;
+    top: 5px;
+    right: 5px;
   }
 `;
 
@@ -152,4 +154,51 @@ const StNothingSearch = styled.div`
   }
 `;
 
-export { StContentsBox, StImageBox, StKeywordDiv, StLeftBox, StNothingSearch, StRatingBox, StRightBox, StTextBox, StWrap };
+const StButtonGroup = styled.div`
+  display: flex;
+  gap: 5px;
+
+  button {
+    cursor: pointer;
+    height: 40px;
+    width: 50%;
+    font-size: 16px;
+    border-radius: 5px;
+
+    &:nth-child(1) {
+      background-color: transparent;
+      color: ${PINK};
+      border: 1px solid ${PINK};
+    }
+
+    &:nth-child(2) {
+      background-color: ${PINK};
+      color: ${WHITE};
+      border: none;
+    }
+  }
+`;
+
+const StSelectCategory = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  label {
+    display: flex;
+    align-items: center;
+
+    input {
+      width: 20px;
+      height: 20px;
+      accent-color: ${PINK};
+    }
+
+    span {
+      margin-left: 10px;
+      color: ${GRAY_10};
+    }
+  }
+`;
+
+export { StSelectCategory, StButtonGroup, StContentsBox, StImageBox, StKeywordDiv, StLeftBox, StNothingSearch, StRatingBox, StRightBox, StTextBox, StWrap };
