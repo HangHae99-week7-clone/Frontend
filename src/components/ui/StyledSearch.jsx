@@ -8,6 +8,7 @@ const StKeywordDiv = styled.div`
   width: 100%;
   height: 160px;
   background-color: ${GRAY_9};
+  margin-top: 80px;
   margin-bottom: 40px;
   font-size: 38px;
 `;

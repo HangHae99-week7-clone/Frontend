@@ -107,6 +107,7 @@ const WithdrawContainer = styled.div`
 
   width: 370px;
   margin:0 auto;
+  margin-top:4rem;
 
   box-sizing: border-box;
 `
