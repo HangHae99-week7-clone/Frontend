@@ -26,7 +26,6 @@ function DetailContainer () {
 
   // get detail data
   const detailState = useSelector(state => state.search.data)
-  console.log(detailState, reviewState, userState)
   
   // change button state when the cases are completed
   useEffect(() => {
