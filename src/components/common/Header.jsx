@@ -54,7 +54,7 @@ const Header = () => {
         <StWrap>
           <StLogo src={isScroll ? LOGO_RED : LOGO_WHITE} onClick={() => window.location.assign("/")} />
 
-          <StIconSearch isScroll={isScroll} style={{ right: openSearch ? "810px" : "400px" }} onClick={openSearch ? onSearchHandler : openSearchHandler}>
+          <StIconSearch isScroll={isScroll} style={{ right: openSearch ? "810px" : "380px" }} onClick={openSearch ? onSearchHandler : openSearchHandler}>
             <HiOutlineSearch />
           </StIconSearch>
 

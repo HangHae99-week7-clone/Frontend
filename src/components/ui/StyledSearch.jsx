@@ -20,7 +20,7 @@ const StWrap = styled.div`
 const StLeftBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 30px;
 
   padding: 25px;
   width: 300px;
@@ -29,10 +29,10 @@ const StLeftBox = styled.div`
   border-radius: 5px;
 
   hr {
+    margin-top: 20px;
     border: 0;
     height: 1px;
     background-color: ${GRAY_7};
-    margin: -10px 0;
   }
 
   h2 {

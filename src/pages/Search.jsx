@@ -21,6 +21,7 @@ import { avgRating, avgRatingWord } from "../utils/avgRating";
 import { __getAllSearch, __getKeywordSearch } from "../app/module/SearchSlice";
 import { selectCategory } from "../utils/selectList";
 import Slider from "../utils/slider";
+import calender from "../images/calender.png";
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -66,8 +67,9 @@ const Search = () => {
           <StLeftBox>
             <div>
               <h2>날짜</h2>
+              <img src={calender} />
+              <hr />
             </div>
-            <hr />
             <div>
               <h2>상세조건</h2>
               <StButtonGroup>
