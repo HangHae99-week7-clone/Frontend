@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import instance from "./instance";
-import { createAsyncThunk } from "@reduxjs/toolkit";
+
 
 export const signUpFetch = createAsyncThunk(
   'user/signup',
@@ -14,6 +14,7 @@ export const signUpFetch = createAsyncThunk(
   }
 )
 
+
 export const loginFetch = createAsyncThunk(
   'user/login',
   async (payload, thunkAPI) => {
@@ -26,6 +27,7 @@ export const loginFetch = createAsyncThunk(
   }
 )
 
+
 export const nicknameChangeFetch = createAsyncThunk(
   'user/nicknameChange',
   async (payload, thunkAPI) => {
@@ -37,6 +39,7 @@ export const nicknameChangeFetch = createAsyncThunk(
     }
   }
 )
+
 
 export const withdrawFetch = createAsyncThunk(
   'user/withdraw',
@@ -149,7 +152,6 @@ const userSlice = createSlice({
       }
       return newState;
     })
-
   }
 })
 

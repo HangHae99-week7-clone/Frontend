@@ -1,19 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Gravatar from "react-gravatar";
 import styled from "styled-components";
 import { CommonBorder, CommonBtn, CommonColumnBox, CommonRowBox, CommonText } from "../ui/styledSignUp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faBan } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
+import { faPencil, faBan, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteReviewFetch, putReviewFetch } from "../../app/module/reviewSlice";
 
 
-function ReviewList () {
+function ReviewList ({data}) {
   const [mode, setMode] = useState("read");
-  const [reviewData, setReviewData] = useState({comment: "", rating: ""})
+  const [reviewData, setReviewData] = useState({comment: data.comment, rating: data.rating})
   const [btnActive, setBtnActive] = useState(false);
+  const userState = useSelector(state => state.user)
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (reviewData.rating !== "" && reviewData.comment !== "" && reviewData.comment.length !== 0)
+      setBtnActive(true)
+    else
+    setBtnActive(false)
+  },[reviewData])
 
+  // change reply mode read or modify
   function changeMode () {
     if (mode === "read")
       setMode("modify");
@@ -21,17 +30,43 @@ function ReviewList () {
       setMode("read");
   }
 
-  function deleteReview () {
-    dispatch();
+  // delete review
+  function deleteReview (event) {
+      dispatch(deleteReviewFetch(Number(data.reviewId)))
   }
 
-
+// select and input rating value
   function selectRatingValue(event) {
     setReviewData({...reviewData, rating: event.target.value})
   }
 
+  // input review data
   function inputReviewContent(event) {
     setReviewData({...reviewData, comment: event.target.value})
+  }
+
+  // modify review data
+  function fixReviewData(event) {
+    event.preventDefault();
+    const sendData = {...reviewData, reviewId: Number(data.reviewId)}
+    dispatch(putReviewFetch(sendData))
+    setMode("read")
+  }
+
+  // change review title what has rating value
+  function reviewTitle() {
+    if (data.rating === 5)
+      return "여기만한 곳은 어디에도 없을 거에요."
+    else if (data.rating > 4.5 && data.rating < 5)
+      return "전체적으로 만족스러웠어요."
+    else if (data.rating > 3.5 && data.rating <= 4.5)
+      return "여기라면 다음에 또 이용할 거에요."
+    else if (data.rating > 2.5 && data.rating <= 3.5)
+      return "기대 이상이네요."
+    else if (data.rating > 1.5 && data.rating <= 2.5)
+      return "조금 아쉬웠지만 이용할만해요."
+    else if (data.rating >= 0 && data.rating <= 1.5)
+      return "조금만 더 신경 써 주세요."
   }
 
   return (
@@ -39,32 +74,32 @@ function ReviewList () {
       <CommonBorder background="#bdbdbd" />
       {mode === "read" ? 
       <ReviewBlock>
-        <Gravatar email="userstate@gmail.com" size={64} default="mp" style={{borderRadius:"50%", height:"64px"}} />
+        <Gravatar email={userState.email} size={64} default="mp" style={{borderRadius:"50%", height:"64px"}} />
         <ReviewContent>
           <CommonRowBox>
-            <ReviewTitle>여기만한 곳은 어디에도 없을 거예요.</ReviewTitle>
-            <FontAwesomeIcon icon={faPencil} style={fixIcon} onClick={changeMode} />
-            <FontAwesomeIcon icon={faBan} style={deleteIcon} onClick={deleteReview} />
+            <ReviewTitle>{reviewTitle()}</ReviewTitle>
+            {data.nickname === userState.nickname ? 
+            <>
+              <FontAwesomeIcon icon={faPencil} style={fixIcon} onClick={changeMode} />
+              <FontAwesomeIcon icon={faBan} style={deleteIcon} id={data.reviewId} onClick={deleteReview} />
+            </> : <></>}
+            </CommonRowBox>
+          <CommonRowBox margin="0.5rem 0 1rem 0 ">
+            <ReviewRating style={{position: "relative", fontSize: "1.1rem", color: "#cecece", marginRight:"0.5rem"}}>
+              ★★★★★
+              <ReviewRating style={{width: `${data.rating*20}%`, position: "absolute", left: "0", top:"0", color: "#FFA726", overflow: "hidden", pointerEvents: "none", height:"16px"}}>★★★★★</ReviewRating>
+            </ReviewRating>
+            <CommonText>{data.rating}</CommonText>
           </CommonRowBox>
-          <CommonRowBox margin="0 0 1rem 0 ">
-            <ReviewRating></ReviewRating>
-            <CommonText>9.0</CommonText>
-          </CommonRowBox>
-          <CommonText style={{fontFamily:"Pretendard-ExtraLight", color:"#bdbdbd", margin:"1rem 0 1rem 0", fontSize:"18px"}}>user nickname</CommonText>
-          <CommonText style={{fontFamily:"Pretendard-ExtraLight", fontSize:"18px"}}>
-            엄마 생신이라 보내드렸어요 <br />
-            세분이서 같이 가셨는데 객실도 너무 깨끗하고 좋으셨다고하시네요 <br />
-            나이가있으신지라 체크인하시는것도 걱정했는데 생각보다 수월하게 하셔서 너무 다행이에요<br />
-            근처에 동대문이랑 먹을곳도 많고 교통편도 편리해서 다니시기에도 좋으셨다고해요<br />
-            수영장도있어서 다녀오셨다는데 아무래도 젊은 사람들 위주다보니 기대하신만큼은 아니셨나봐요<br />
-            그래도 아주 만족하셨다고하니 기뻤습니다</CommonText>
+          <CommonText style={{fontFamily:"Pretendard-ExtraLight", color:"#bdbdbd", margin:"1rem 0 1rem 0", fontSize:"18px"}}>{data.nickname}</CommonText>
+          <CommonText style={{fontFamily:"Pretendard-ExtraLight", fontSize:"18px"}}>{data.comment}</CommonText>
         </ReviewContent>
       </ReviewBlock>
       : 
-      <InputBox style={{marginTop:"1.5rem"}} onSubmit>
+      <InputBox style={{marginTop:"1.5rem"}} onSubmit={fixReviewData}>
         <CommonRowBox style={{gap:"2rem"}}>
           <CommonColumnBox>
-            <CommonText fontSize="1.2rem" margin="0 0 1.8rem 0">술취한 너구리</CommonText>
+            <CommonText fontSize="1.2rem" margin="0 0 1.8rem 0">{data.nickname}</CommonText>
             <CommonText fontSize="1rem"  margin="0 0 0.5rem 0">평점 (5점 만점)</CommonText>
             <RatingSelect onChange={selectRatingValue} value={reviewData.rating}>
               <option value="0">0점</option>

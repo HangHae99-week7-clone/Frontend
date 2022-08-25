@@ -94,7 +94,7 @@ function MyPageContainer() {
           <PageAvatar>
             <Gravatar style={{borderRadius:"50%"}} email={userState.email} size={128} default="mp" />
           </PageAvatar>
-          <ProfileEmail>developneoguri@gmail.com</ProfileEmail>
+          <ProfileEmail>{userState.email}</ProfileEmail>
           {mode === "read" ?
           <>
             <CommonRowBox margin="2rem 0 0 0">

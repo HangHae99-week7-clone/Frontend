@@ -24,9 +24,7 @@ export const getDetailPageFetch = createAsyncThunk(
   "get/detail", 
   async (payload, thunkAPI) => {
     try {
-      console.log(payload)
       const response = await instance.get(`/post/${payload}`);
-      console.log(response.data)
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -54,6 +52,7 @@ const searchSlice = createSlice({
     [getDetailPageFetch.fulfilled]: (state, action) => {
       // state.isLoading = false;
       state.data = action.payload;
+      state.data.review = action.payload.review.sort((a, b) => b.reviewId - a.reviewId);
     },
   },
 });
