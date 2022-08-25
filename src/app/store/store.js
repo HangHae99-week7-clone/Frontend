@@ -9,4 +9,5 @@ export const store = configureStore({
     search,
     review:reviewSlice.reducer
   },
+  devTools: process.env.NODE_ENV !== 'production',
 });
