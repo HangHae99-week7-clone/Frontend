@@ -39,7 +39,7 @@ const StFooter = styled.div`
   background-color: ${GRAY_9};
   border-top: 1.5px solid ${GRAY_7};
   margin-top: 70px;
-  height: 200px;
+  transform: translateY(115px);
   padding: 40px 0;
 
   div {

@@ -6,37 +6,56 @@ const initialState = {
   result: [],
   isLoading: false,
   error: null,
-  data: {}
+  data: {},
 };
 
-//검색 결과 GET 요청
-export const __getKeywordSearch = createAsyncThunk("get/search", async (keyword, thunkAPI) => {
+//모든 숙소 결과 GET 요청
+export const __getAllSearch = createAsyncThunk("get/allsearch", async (_, thunkAPI) => {
   try {
-    const { data } = await axios.get(`${process.env.REACT_APP_API}/post/search?keyword=${keyword}`);
+    const { data } = await instance.get("/post");
     return thunkAPI.fulfillWithValue(data.Result);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
 });
 
-
-export const getDetailPageFetch = createAsyncThunk(
-  "get/detail", 
-  async (payload, thunkAPI) => {
-    try {
-      const response = await instance.get(`/post/${payload}`);
-      return thunkAPI.fulfillWithValue(response.data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
+//검색 결과 GET 요청
+export const __getKeywordSearch = createAsyncThunk("get/search", async (keyword, thunkAPI) => {
+  try {
+    const { data } = await instance.get(`/post/search?keyword=${keyword}`);
+    return thunkAPI.fulfillWithValue(data.Result);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-);
+});
+
+export const getDetailPageFetch = createAsyncThunk("get/detail", async (payload, thunkAPI) => {
+  try {
+    const response = await instance.get(`/post/${payload}`);
+    return thunkAPI.fulfillWithValue(response.data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
 
 const searchSlice = createSlice({
   name: "searchSlice",
   initialState,
   reducers: {},
   extraReducers: {
+    //도든 숙소 결과 조회
+    [__getAllSearch.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getAllSearch.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.result = action.payload;
+    },
+    [__getAllSearch.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+
     //검색 결과 조회
     [__getKeywordSearch.pending]: (state) => {
       state.isLoading = true;
