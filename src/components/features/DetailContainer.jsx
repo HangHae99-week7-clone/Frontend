@@ -83,18 +83,21 @@ function DetailContainer () {
             </ImageBox>
             <CommonColumnBox>
               <SummaryTitle>{detailState.placename}</SummaryTitle>
-              {ratingAverage >=3 ?
+              {ratingAverage >= 3 ?
               <CommonRowBox>
-                <SummaryRating style={{color:"#ffffff", background:"#FFA726", borderRadius:"5px", padding:"0 0.2rem", marginRight:"0.3rem"}}>{ratingAverage}</SummaryRating>
+                <SummaryRating style={{color:"#ffffff", background:"#FFA726", borderRadius:"5px", padding:"0 0.2rem", marginRight:"0.3rem"}}>{ratingAverage.toFixed(1)}</SummaryRating>
                 <SummaryRating color="#FFA726">{ratingTitle}</SummaryRating>
               </CommonRowBox> :<></>}
               <SummaryAddress>{detailState.location}</SummaryAddress>
+              <CommonRowBox>
+                {detailState.keyword.length !== 0 ? detailState.keyword.map((elem, idx) => <span key={idx} style={{color:"#1565c0", marginRight:"1rem"}}>#{elem}</span>) : <></>}
+              </CommonRowBox>
               <CommonColumnBox background="#fafafa" margin="3rem 2rem 0 0" padding="1.5rem">
                 <CommonRowBox margin="0 0 1rem 0">
                   <CommonText color="#2d2727" fontFamily="Pretendard-Bold" fontSize="16px">사장님 한마디</CommonText>
                   <CommonText margin="0 0 0 auto" color="#23887c" fontSize="16px" style={{cursor:"pointer"}}>더보기</CommonText>
                 </CommonRowBox>
-                <CommonText style={{fontFamily:"Pretendard-ExtraLight"}}>{detailState.message}</CommonText>
+                <CommonText style={{fontFamily:"Pretendard-ExtraLight", lineHeight:"1.2rem"}}>{detailState.message}</CommonText>
               </CommonColumnBox>
               {detailState.userId === userState.userId ?
                 <CommonRowBox margin=" auto 3rem 0 0">
