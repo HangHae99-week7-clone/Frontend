@@ -20,6 +20,7 @@ import Layout from "../layout/Layout";
 import { avgRating, avgRatingWord } from "../utils/avgRating";
 import { __getAllSearch, __getKeywordSearch } from "../app/module/SearchSlice";
 import { selectCategory } from "../utils/selectList";
+import Slider from "../utils/slider";
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -87,6 +88,7 @@ const Search = () => {
             </div>
             <div>
               <h3>가격</h3>
+              <Slider />
             </div>
           </StLeftBox>
 

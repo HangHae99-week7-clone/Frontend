@@ -20,7 +20,7 @@ const StWrap = styled.div`
 const StLeftBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 40px;
 
   padding: 25px;
   width: 300px;
@@ -32,6 +32,7 @@ const StLeftBox = styled.div`
     border: 0;
     height: 1px;
     background-color: ${GRAY_7};
+    margin: -10px 0;
   }
 
   h2 {
@@ -43,7 +44,7 @@ const StLeftBox = styled.div`
   h3 {
     font-family: "Pretendard-Bold";
     color: ${GRAY_10};
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
 `;
 
