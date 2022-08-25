@@ -8,7 +8,7 @@ import userSlice from './app/module/userSlice';
 
 
 if (localStorage.token) {
-  store.dispatch(userSlice.actions.currentUser({email: localStorage.email, nickname: localStorage.nickname}))
+  store.dispatch(userSlice.actions.currentUser({email: localStorage.email, nickname: localStorage.nickname, userId: localStorage.userId}))
 }
 
 const container = document.getElementById('root');
