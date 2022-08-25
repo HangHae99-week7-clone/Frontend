@@ -90,7 +90,8 @@ function DetailContainer () {
               </CommonRowBox> :<></>}
               <SummaryAddress>{detailState.location}</SummaryAddress>
               <CommonRowBox>
-              {detailState.keyword.length !== 0 ? detailState.keyword.map((elem, idx) => elem === undefined ? <span key={idx} style={{color:"#1565c0", marginTop:"0.5rem", marginRight:"1rem"}}>#{elem}</span> : <></>) : <></> } 
+              {detailState.keyword.length !== 0 ? 
+                detailState.keyword.map((elem, idx) => <span key={idx} style={{color:"#1565c0", marginTop:"0.5rem", marginRight:"1rem"}}>#{elem}</span>) : <></>} 
               </CommonRowBox>
               <CommonColumnBox background="#fafafa" margin="3rem 2rem 0 0" padding="1.5rem">
                 <CommonRowBox margin="0 0 1rem 0">
