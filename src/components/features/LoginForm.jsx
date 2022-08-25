@@ -107,7 +107,7 @@ const LoginFormContainer = styled.div`
   width: 370px;
   height: 700px;
   margin:auto;
-  margin-top: 2rem;
+  margin-top: 5rem;
 
   box-sizing: border-box;
 `
