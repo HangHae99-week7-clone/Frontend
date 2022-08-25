@@ -3,7 +3,7 @@ import Gravatar from "react-gravatar";
 import styled from "styled-components";
 import { CommonBorder, CommonBtn, CommonColumnBox, CommonRowBox, CommonText } from "../ui/styledSignUp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faBan, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faPencil, faBan } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteReviewFetch, putReviewFetch } from "../../app/module/reviewSlice";
 
@@ -156,6 +156,7 @@ const ReviewTitle = styled.h2`
 const ReviewRating = styled.p`
   
 `
+
 const fixIcon ={
   marginLeft:"auto", 
   height:"24px", 

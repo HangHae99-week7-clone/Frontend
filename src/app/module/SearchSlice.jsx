@@ -38,6 +38,16 @@ export const getDetailPageFetch = createAsyncThunk("get/detail", async (payload,
   }
 });
 
+export const deleteDetailPageFetch = createAsyncThunk("delete/detail", async (payload, thunkAPI) => {
+  try {
+    const response = await instance.delete(`/post/${payload}`);
+    console.log(response)
+    return thunkAPI.fulfillWithValue(response.data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 const searchSlice = createSlice({
   name: "searchSlice",
   initialState,
@@ -68,10 +78,31 @@ const searchSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+
+    //상세 정보 가져오기
+    [getDetailPageFetch.pending]: (state, action) => {
+      state.isLoading = true;
+    },
     [getDetailPageFetch.fulfilled]: (state, action) => {
-      // state.isLoading = false;
       state.data = action.payload;
       state.data.review = action.payload.review.sort((a, b) => b.reviewId - a.reviewId);
+    },
+    [getDetailPageFetch.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+
+    //작성된 글 삭제하기
+    [deleteDetailPageFetch.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [deleteDetailPageFetch.fulfilled]: (state, action) => {
+      // state.isLoading = false;
+      window.location.assign('/')
+    },
+    [deleteDetailPageFetch.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
   },
 });

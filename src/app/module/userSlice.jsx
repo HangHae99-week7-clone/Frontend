@@ -66,12 +66,14 @@ const userSlice = createSlice({
     error: "",
     token: "",
     email: "",
-    nickname: ""
+    nickname: "",
+    userId: ""
   },
   reducers: {
     currentUser: (state, action) => {
       state.email = action.payload.email
       state.nickname = action.payload.nickname
+      state.userId = Number(action.payload.userId)
     }
   },
   extraReducers: builder => {
@@ -101,6 +103,7 @@ const userSlice = createSlice({
       window.localStorage.setItem("token", action.payload.token)
       window.localStorage.setItem("email", action.payload.email)
       window.localStorage.setItem("nickname", action.payload.nickname)
+      window.localStorage.setItem("userId", action.payload.userId)
       const newState = {
         ...state,
         result: action.payload.result,

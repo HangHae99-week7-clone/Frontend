@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { getDetailPageFetch } from "../../app/module/SearchSlice";
+import { deleteDetailPageFetch, getDetailPageFetch } from "../../app/module/SearchSlice";
 import { CommonBtn, CommonColumnBox, CommonRowBox, CommonText } from "../ui/styledSignUp";
 import ReviewList from "./ReviewList";
 import Parser from 'html-react-parser';
 import { postReviewFetch } from "../../app/module/reviewSlice";
 import { avgRating, avgRatingWord } from "../../utils/avgRating";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencil, faBan } from "@fortawesome/free-solid-svg-icons";
 
 function DetailContainer () {
   const [modalState, setModalState] = useState("booking");
@@ -23,8 +24,11 @@ function DetailContainer () {
       dispatch(getDetailPageFetch(Number(id)));
   }, [reviewState])
 
+  // get detail data
   const detailState = useSelector(state => state.search.data)
-
+  console.log(detailState, reviewState, userState)
+  
+  // change button state when the cases are completed
   useEffect(() => {
     if (reviewData.rating !== "" && reviewData.comment !== "" && reviewData.comment.length !== 0)
       setBtnActive(true)
@@ -32,56 +36,72 @@ function DetailContainer () {
     setBtnActive(false)
   },[reviewData])
 
-
+  // chnage mode when user click to tap button
   function changeMode(event) {
     setModalState(event.target.id)
   }
 
-
+  // input rating when user selected rating value
   function selectRatingValue(event) {
     setReviewData({...reviewData, rating: Number(event.target.value)})
   }
 
-
+  // input content when user inputed textarea
   function inputReviewContent(event) {
     setReviewData({...reviewData, comment: event.target.value})
   }
 
-
+  // submit reviewpost
   function submitReview(event) {
     event.preventDefault();
     dispatch(postReviewFetch({ ...reviewData, postId: Number(id)}))
   }
   
+  // get ratingAverage and ratingTitle
   let ratingAverage, ratingTitle;
   if (Object.keys(detailState).length !== 0) {
     ratingAverage = avgRating(detailState.review)
     ratingTitle = avgRatingWord(ratingAverage)
   }
 
+  // send to modify page
+  function modifyContent() {
+    window.location.assign(`/edit/${Number(id)}`)
+  }
+
+  //delete post data
+  function deleteContent(){
+    dispatch(deleteDetailPageFetch(Number(id)));
+  }
+  
   return (
       <DetailBox>
         {Object.keys(detailState).length !== 0 ?
         <>
           <DetailHeader>
             <ImageBox>
-              <ThumbnailImage src="https://image.goodchoice.kr/resize_490x348/affiliate/2022/06/27/16/d1da9bfd71f7441aa65323e862ccb4ea.jpg" alt="Lodging Thumbnail Image" />
+              <ThumbnailImage src={detailState.images} alt="Lodging Thumbnail Image" />
             </ImageBox>
             <CommonColumnBox>
               <SummaryTitle>{detailState.placename}</SummaryTitle>
-              {
+              {ratingAverage >=3 ?
               <CommonRowBox>
-                <SummaryRating style={{color:"#ffffff", background:"#FFA726", borderRadius:"5px", padding:"0 0.2rem", marginRight:"0.3rem"}}>8.8</SummaryRating>
-                <SummaryRating color={ratingAverage < 3 ? "#000000" : "#FFA726"}>{ratingTitle}</SummaryRating>
-              </CommonRowBox>}
+                <SummaryRating style={{color:"#ffffff", background:"#FFA726", borderRadius:"5px", padding:"0 0.2rem", marginRight:"0.3rem"}}>{ratingAverage}</SummaryRating>
+                <SummaryRating color="#FFA726">{ratingTitle}</SummaryRating>
+              </CommonRowBox> :<></>}
               <SummaryAddress>{detailState.location}</SummaryAddress>
               <CommonColumnBox background="#fafafa" margin="3rem 2rem 0 0" padding="1.5rem">
                 <CommonRowBox margin="0 0 1rem 0">
                   <CommonText color="#2d2727" fontFamily="Pretendard-Bold" fontSize="16px">사장님 한마디</CommonText>
                   <CommonText margin="0 0 0 auto" color="#23887c" fontSize="16px" style={{cursor:"pointer"}}>더보기</CommonText>
                 </CommonRowBox>
-                <CommonText>{detailState.message}</CommonText>
+                <CommonText style={{fontFamily:"Pretendard-ExtraLight"}}>{detailState.message}</CommonText>
               </CommonColumnBox>
+              {detailState.userId === userState.userId ?
+                <CommonRowBox margin=" auto 3rem 0 0">
+                  <FontAwesomeIcon icon={faPencil} style={fixIcon} onClick={modifyContent} />
+                  <FontAwesomeIcon icon={faBan} style={deleteIcon} id={id} onClick={deleteContent}/>
+                </CommonRowBox> : <></>}
             </CommonColumnBox>
           </DetailHeader>
           <DetailMenu>
@@ -121,7 +141,7 @@ function DetailContainer () {
                   <CommonText fontFamily="Pretendard-Bold" fontSize="26px">{detailState.roomtitle[1]}</CommonText>
                   <CommonRowBox margin="4rem 0 0 0" style={{borderBottom:"1px solid #ebebeb"}}>
                     <CommonText fontFamily="Pretendard-Bold" margin="0 0 1rem 0">가격</CommonText>
-                    <CommonText margin="0 0 0 auto">{detailState.roomcharge[0].toLocaleString("ko-KR")} 원</CommonText>
+                    <CommonText margin="0 0 0 auto">{detailState.roomcharge[1].toLocaleString("ko-KR")} 원</CommonText>
                   </CommonRowBox>
                   <CommonRowBox margin="2rem 0" style={{cursor:"pointer"}}>
                     <CommonText>객실 이용 안내</CommonText>
@@ -226,6 +246,8 @@ const SummaryRating = styled.div`
 const SummaryAddress = styled.div`
   font-size: 1.2rem;
   color: #787a7c;
+
+  margin-top: 0.5rem;
 `
 
 const ThumbnailImage = styled.img`
@@ -370,3 +392,16 @@ const RatingSelect = styled.select`
     padding-left: 1rem;
   }
 `
+
+const fixIcon ={
+  marginLeft:"auto", 
+  height:"24px", 
+  cursor:"pointer"
+}
+
+
+const deleteIcon ={
+  marginLeft:"1rem",
+  height:"24px",
+  cursor:"pointer"
+}
