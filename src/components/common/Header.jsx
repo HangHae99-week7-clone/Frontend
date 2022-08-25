@@ -61,7 +61,7 @@ const Header = () => {
           {openSearch ? (
             <>
               <StForm isScroll={isScroll} onSubmit={onSearchHandler}>
-                <input type="text" autoFocus value={search} onChange={onChangeHandler} placeholder="지역, 키워드" />
+                <input type="text" autoFocus value={search} onChange={onChangeHandler} placeholder="지역, 키워드(최대 2개까지 입력 가능)" />
               </StForm>
 
               <StIconCancel isScroll={isScroll} onClick={openSearchHandler}>
