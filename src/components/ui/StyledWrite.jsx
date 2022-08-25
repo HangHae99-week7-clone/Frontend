@@ -4,7 +4,7 @@ import { GRAY_7, GRAY_8, RED, WHITE } from "../../utils/colorPalette";
 const StLayout = styled.div`
   width: 964px;
   height: 100%;
-  margin: 30px auto 100px auto;
+  margin: 110px auto 100px auto;
   border: 1px solid ${GRAY_8};
   border-radius: 10px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
