@@ -84,10 +84,8 @@ const Edit = () => {
       roomcharge: `${roomCharge.roomCharge1},${roomCharge.roomCharge2}`,
     };
     const data = await instance.put(`/post/${id}`, value);
-    console.log(data);
-    // console.log(value);
     alert("숙소 수정이 완료되었습니다");
-    // window.location.reload();
+    window.location.assign(`/detail/${id}`);
   };
 
   useEffect(() => {
