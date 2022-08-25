@@ -213,6 +213,7 @@ const DetailBox = styled.div`
 
   width: 1024px;
   margin:2.5rem auto;
+  margin-top: 7rem;
 
   box-sizing: border-box;
 `
