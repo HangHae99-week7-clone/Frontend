@@ -1,8 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit';
-import LoginSlice from '../module/LoginSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import userSlice from "../module/userSlice";
+import search from "../module/SearchSlice";
+import reviewSlice from "../module/reviewSlice";
 
 export const store = configureStore({
   reducer: {
-    login: LoginSlice.reducer,
+    user: userSlice.reducer,
+    search,
+    review:reviewSlice.reducer
   },
 });

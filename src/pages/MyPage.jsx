@@ -1,12 +1,16 @@
+import Header from "../components/common/Header";
+import MyPageContainer from "../components/features/MyPageContainer";
 
 
 
 function MyPage () {
 
-  return (
-    <div>
 
-    </div>
+  return (
+    <>
+      <Header />
+      <MyPageContainer />
+    </>
   )
 }
 

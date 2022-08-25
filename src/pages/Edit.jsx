@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { StLayout, StSubmit, StTable, StImagePreview } from "../components/ui/StyledWrite";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import instance from "../app/module/instance";
+import { getDetailPageFetch } from "../app/module/SearchSlice";
 import { selectCategory, selectLocation, selectKeyword } from "../utils/selectList";
 /////////////////////////////////////////////////////////////////
 //MUI 관련 임포트
@@ -28,27 +31,27 @@ import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
-const Write = () => {
-  const initialState = {
-    images: "",
-    placename: "",
-    category: "",
-    location: "",
-    message: "",
-    keyword: "",
-    roomtitle: "",
-    roomcharge: "",
-    roomimage: "",
-    content: "",
-  };
-  const [contents, setContents] = useState(initialState);
+const Edit = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.search.data);
+
+  const [contents, setContents] = useState({});
   const [keyword, setKeyword] = useState({});
   const [roomImage, setRoomImage] = useState({});
+  const [roomTitle, setRoomTitle] = useState({});
+  const [roomCharge, setRoomCharge] = useState({});
   const editorRef = useRef();
-  const roomtitle1Ref = useRef();
-  const roomtitle2Ref = useRef();
-  const roomcharge1Ref = useRef();
-  const roomcharge2Ref = useRef();
+
+  useEffect(() => {
+    dispatch(getDetailPageFetch(id));
+    setContents({ ...contents, images: data.images, placename: data.placename, category: data.category, location: data.location, message: data.message });
+    data.keyword?.length && setKeyword({ keyword1: data.keyword[0], keyword2: data.keyword[1], keyword3: data.keyword[2] });
+    data.roomimage?.length && setRoomImage({ roomImage1: data.roomimage[0], roomImage2: data.roomimage[1] });
+    data.roomtitle?.length && setRoomTitle({ roomTitle1: data.roomtitle[0], roomTitle2: data.roomtitle[1] });
+    data.roomcharge?.length && setRoomCharge({ roomCharge1: data.roomcharge[0], roomCharge2: data.roomcharge[1] });
+    data.content?.length && editorRef.current?.getInstance().setHTML(data.content);
+  }, [data.postId]);
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -60,19 +63,31 @@ const Write = () => {
     setKeyword({ ...keyword, [name]: value });
   };
 
+  const onTitleHandler = (event) => {
+    const { name, value } = event.target;
+    setRoomTitle({ ...roomTitle, [name]: value });
+  };
+
+  const onChargeHandler = (event) => {
+    const { name, value } = event.target;
+    setRoomCharge({ ...roomCharge, [name]: value });
+  };
+
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     const value = {
       ...contents,
-      content: editorRef.current?.getInstance().getHTML(),
       keyword: `${keyword.keyword1},${keyword.keyword2},${keyword.keyword3}`,
-      roomtitle: `${roomtitle1Ref.current?.value},${roomtitle2Ref.current?.value}`,
-      roomcharge: `${roomcharge1Ref.current?.value},${roomcharge2Ref.current?.value}`,
       roomimage: `${roomImage.roomImage1},${roomImage.roomImage2}`,
+      content: editorRef.current?.getInstance().getHTML(),
+      roomtitle: `${roomTitle.roomTitle1},${roomTitle.roomTitle2}`,
+      roomcharge: `${roomCharge.roomCharge1},${roomCharge.roomCharge2}`,
     };
-    await instance.post("/post", value);
-    alert("숙소 등록이 완료되었습니다");
-    window.location.reload();
+    const data = await instance.put(`/post/${id}`, value);
+    console.log(data);
+    // console.log(value);
+    alert("숙소 수정이 완료되었습니다");
+    // window.location.reload();
   };
 
   useEffect(() => {
@@ -108,8 +123,6 @@ const Write = () => {
   };
   /////////////////////////////////////////////////////////////////
 
-  console.log(keyword);
-
   return (
     <>
       <Header />
@@ -120,11 +133,9 @@ const Write = () => {
             <tr>
               <th scope="row">숙소 이미지</th>
               <td>
-                {contents.images && (
-                  <StImagePreview>
-                    <img src={contents.images} />
-                  </StImagePreview>
-                )}
+                <StImagePreview>
+                  <img src={contents.images} />
+                </StImagePreview>
                 <IconButton color="error" aria-label="upload picture" component="label">
                   <input hidden type="file" name="image" accept="image/*" onChange={(event) => handleFileInput(event)} />
                   <PhotoCamera />
@@ -135,7 +146,7 @@ const Write = () => {
             <tr>
               <th scope="row">상호명</th>
               <td>
-                <TextField type="text" label="상호명" name="placename" value={contents.placename} onChange={onChangeHandler} size="small" fullWidth />
+                <TextField type="text" label="상호명" name="placename" value={contents.placename || ""} onChange={onChangeHandler} size="small" fullWidth />
               </td>
             </tr>
 
@@ -144,7 +155,7 @@ const Write = () => {
               <td>
                 <FormControl fullWidth size="small">
                   <InputLabel>카테고리</InputLabel>
-                  <Select name="category" value={contents.category} label="카테고리" onChange={onChangeHandler}>
+                  <Select name="category" value={contents.category || ""} label="카테고리" onChange={onChangeHandler}>
                     {selectCategory.map((value) => (
                       <MenuItem key={value} value={value}>
                         {value}
@@ -158,7 +169,7 @@ const Write = () => {
             <tr>
               <th scope="row">숙소 위치</th>
               <td>
-                <TextField type="text" label="위치" name="location" value={contents.location} onChange={onChangeHandler} size="small" fullWidth />
+                <TextField type="text" label="위치" name="location" value={contents.location || ""} onChange={onChangeHandler} size="small" fullWidth />
               </td>
             </tr>
 
@@ -201,7 +212,7 @@ const Write = () => {
             <tr>
               <th scope="row">사장님 한마디</th>
               <td>
-                <TextField type="text" label="사장님 한마디" name="message" value={contents.message} onChange={onChangeHandler} size="small" fullWidth />
+                <TextField type="text" label="사장님 한마디" name="message" value={contents.message || ""} onChange={onChangeHandler} size="small" fullWidth />
               </td>
             </tr>
 
@@ -230,42 +241,54 @@ const Write = () => {
                 객실 정보
               </th>
               <td>
-                {roomImage.roomImage1 && (
-                  <StImagePreview style={{ marginBottom: "10px" }}>
-                    <img src={roomImage.roomImage1} />
-                  </StImagePreview>
-                )}
+                <StImagePreview style={{ marginBottom: "10px" }}>
+                  <img src={roomImage.roomImage1} />
+                </StImagePreview>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <IconButton color="error" aria-label="upload picture" component="label">
                     <input hidden type="file" name="roomImage1" accept="image/*" onChange={(event) => handleFileInput(event)} />
                     <PhotoCamera />
                   </IconButton>
-                  <TextField type="text" label="객실명" inputRef={roomtitle1Ref} size="small" fullWidth />
-                  <TextField type="text" label="객실가격" inputRef={roomcharge1Ref} size="small" fullWidth />
+                  <TextField type="text" label="객실명" value={roomTitle.roomTitle1 || ""} name="roomTitle1" onChange={onTitleHandler} size="small" fullWidth />
+                  <TextField
+                    type="text"
+                    label="객실가격"
+                    value={roomCharge.roomCharge1 || ""}
+                    name="roomCharge1"
+                    onChange={onChargeHandler}
+                    size="small"
+                    fullWidth
+                  />
                 </div>
               </td>
             </tr>
             <tr>
               <td>
-                {roomImage.roomImage2 && (
-                  <StImagePreview style={{ marginBottom: "10px" }}>
-                    <img src={roomImage.roomImage2} />
-                  </StImagePreview>
-                )}
+                <StImagePreview style={{ marginBottom: "10px" }}>
+                  <img src={roomImage.roomImage2} />
+                </StImagePreview>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <IconButton color="error" aria-label="upload picture" component="label">
                     <input hidden type="file" name="roomImage2" accept="image/*" onChange={(event) => handleFileInput(event)} />
                     <PhotoCamera />
                   </IconButton>
-                  <TextField type="text" label="객실명" inputRef={roomtitle2Ref} size="small" fullWidth />
-                  <TextField type="text" label="객실가격" inputRef={roomcharge2Ref} size="small" fullWidth />
+                  <TextField type="text" label="객실명" value={roomTitle.roomTitle2 || ""} name="roomTitle2" onChange={onTitleHandler} size="small" fullWidth />
+                  <TextField
+                    type="text"
+                    label="객실가격"
+                    value={roomCharge.roomCharge2 || ""}
+                    name="roomCharge2"
+                    onChange={onChargeHandler}
+                    size="small"
+                    fullWidth
+                  />
                 </div>
               </td>
             </tr>
           </tbody>
         </StTable>
 
-        <StSubmit onClick={onSubmitHandler}>숙소 등록</StSubmit>
+        <StSubmit onClick={onSubmitHandler}>숙소 수정</StSubmit>
       </StLayout>
 
       <Footer />
@@ -273,4 +296,4 @@ const Write = () => {
   );
 };
 
-export default Write;
+export default Edit;
