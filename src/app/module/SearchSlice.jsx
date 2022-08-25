@@ -41,7 +41,6 @@ export const getDetailPageFetch = createAsyncThunk("get/detail", async (payload,
 export const deleteDetailPageFetch = createAsyncThunk("delete/detail", async (payload, thunkAPI) => {
   try {
     const response = await instance.delete(`/post/${payload}`);
-    console.log(response)
     return thunkAPI.fulfillWithValue(response.data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
