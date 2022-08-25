@@ -146,6 +146,7 @@ const SignUpFormContainer = styled.div`
   width: 370px;
   height: 500px;
   margin:auto;
+  margin-top:5rem;
 
   box-sizing: border-box;
 `
